@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const SetPassword = () => {
+  const navigate = useNavigate();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -17,6 +19,8 @@ const SetPassword = () => {
       return;
     }
 
+    console.log("in");
+
     const response = await fetch(
       "http://localhost:3000/api/google/set-password",
       {
@@ -30,7 +34,11 @@ const SetPassword = () => {
     );
 
     const data = await response.json();
-    setMessage(data.message);
+    if (data?.redirectUrl) {
+      window.location.href = data.redirectUrl; // Redirects to external URL
+    } else {
+      setMessage(data.message);
+    }
   };
 
   return (
