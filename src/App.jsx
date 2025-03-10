@@ -15,6 +15,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/invoice-emails" element={<InvoiceEmails />} />
           <Route path="/set-password" element={<SetPassword />} />
+          <Route path="/set" element={<Signup />} />
         </Routes>
       </Router>
     </>
