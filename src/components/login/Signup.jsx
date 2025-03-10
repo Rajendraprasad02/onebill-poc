@@ -14,7 +14,8 @@ const Signup = () => {
 
   const handleOAuthLogin = (provider) => {
     console.log(`Signing up with ${provider}`);
-    window.location.href = "http://localhost:3000/api/google"; // Redirects the user for OAuth
+    window.location.href =
+      "https://onebill-poc-backend-production.up.railway.app/api/google"; // Redirects the user for OAuth
   };
 
   return (

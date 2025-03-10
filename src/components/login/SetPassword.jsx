@@ -22,7 +22,7 @@ const SetPassword = () => {
     console.log("in");
 
     const response = await fetch(
-      "http://localhost:3000/api/google/set-password",
+      "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
       {
         method: "POST",
         headers: {
