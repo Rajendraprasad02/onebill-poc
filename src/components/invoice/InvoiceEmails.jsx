@@ -45,7 +45,7 @@ const InvoiceEmails = () => {
     const fetchEmails = async () => {
       try {
         const response = await axios.get(
-          `https://onebill-poc-backend-production.up.railway.app/api/yahoo-emails?token=${token}`
+          `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
           // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
         );
         setEmails(response?.data?.emails || []);
