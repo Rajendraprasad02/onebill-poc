@@ -14,8 +14,7 @@ const Signup = () => {
 
   const handleOAuthLogin = (provider) => {
     console.log(`Signing up with ${provider}`);
-    window.location.href =
-      "https://onebill-poc-backend-production.up.railway.app/api/google"; // Redirects the user for OAuth
+    window.location.href = `https://onebill-poc-backend-production.up.railway.app/api/${provider}`; // Redirects the user for OAuth
   };
 
   return (
@@ -64,19 +63,19 @@ const Signup = () => {
           <p className="text-center text-gray-600">Or sign up with</p>
           <div className="flex justify-center gap-3 mt-3">
             <button
-              onClick={() => handleOAuthLogin("Google")}
+              onClick={() => handleOAuthLogin("google")}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300"
             >
               Google
             </button>
             <button
-              onClick={() => handleOAuthLogin("Outlook")}
+              onClick={() => handleOAuthLogin("outlook")}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
             >
               Outlook
             </button>
             <button
-              onClick={() => handleOAuthLogin("Yahoo")}
+              onClick={() => handleOAuthLogin("yahoo")}
               className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-300"
             >
               Yahoo
