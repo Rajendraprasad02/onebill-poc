@@ -69,7 +69,7 @@ const Signup = () => {
               Google
             </button>
             <button
-              onClick={() => handleOAuthLogin("microsoft")}
+              onClick={() => handleOAuthLogin("outlook")}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
             >
               Outlook
