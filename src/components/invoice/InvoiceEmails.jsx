@@ -222,7 +222,7 @@ const InvoiceEmails = () => {
                       <div
                         className="mt-2"
                         dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(email.messageBody.trim()),
+                          __html: DOMPurify.sanitize(email?.body?.trim()),
                         }}
                       />
                     ) : (
