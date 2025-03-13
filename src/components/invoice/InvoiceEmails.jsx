@@ -199,7 +199,7 @@ const InvoiceEmails = () => {
         {menuOpen && (
           <aside className="w-[240px] bg-zinc-900 p-4 border-r border-zinc-800 md:hidden">
             <nav className="flex flex-col gap-2">
-              {["inbox", "bills", "starred", "archive", "trash"].map((tab) => (
+              {["inbox"].map((tab) => (
                 <button
                   key={tab}
                   className={`p-2 text-left ${
@@ -281,7 +281,7 @@ const InvoiceEmails = () => {
                                         download={file.filename}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline bg-blue-100 dark:bg-blue-900 px-4 py-2 rounded-md"
+                                        className="text-gray-200 hover:underline  px-4 py-2 rounded-md"
                                       >
                                         Download
                                       </a>
