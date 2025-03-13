@@ -248,10 +248,6 @@ const InvoiceEmails = () => {
     fetchAllEmails();
   }, [gmailToken, yahooToken, outlookToken]); // Dependencies updated
 
-  console.log("gmailEmails", gmailEmails);
-  console.log("yahooEmails", yahooEmails);
-  console.log("outlookEmails", outlookEmails);
-
   return (
     <div className="p-6">
       {/* Profile Section */}
