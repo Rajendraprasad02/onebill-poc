@@ -152,7 +152,7 @@ const InvoiceEmails = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
       <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
         <div className="flex items-center gap-4">
           <button
@@ -232,7 +232,7 @@ const InvoiceEmails = () => {
             ))}
           </nav>
         </aside>
-        <main className="flex-1 p-4">
+        <main className="flex-1 overflow-auto p-4">
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
 
@@ -242,7 +242,7 @@ const InvoiceEmails = () => {
             </p>
           ) : (
             <>
-              <ul className="space-y-4 w-full flex flex-col h-screen overflow-scroll  overflow-x-hidden p-2">
+              <ul className="space-y-4 w-full flex flex-col h-screen overflow-y-auto overflow-x-hidden p-2 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300 dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-900">
                 {emails?.map((email, index) => (
                   <li
                     key={index}
