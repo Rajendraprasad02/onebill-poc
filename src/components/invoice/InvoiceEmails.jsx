@@ -68,47 +68,64 @@ const InvoiceEmails = () => {
               attachments: email?.attachments || [], // Ensure attachments are included
             })) || [];
         } else if (provider === "outlook") {
-          response = await axios.get(
-            "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
-            {
-              headers: { Authorization: `Bearer ${token}` },
+          try {
+            // Fetch Outlook Emails with "invoice" in Subject
+            response = await axios.get(
+              "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            // Fetch User Profile
+            const userProfileRes = await axios.get(
+              "https://graph.microsoft.com/v1.0/me",
+              {
+                headers: { Authorization: `Bearer ${token}` },
+              }
+            );
+
+            const userProfile = userProfileRes.data;
+            console.log("User Profile:", userProfile);
+
+            // Attempt to Fetch Profile Picture
+            let profilePictureUrl = "https://via.placeholder.com/150"; // Default Image
+            try {
+              const profilePictureRes = await axios.get(
+                "https://graph.microsoft.com/v1.0/me/photo/$value",
+                {
+                  headers: { Authorization: `Bearer ${token}` },
+                  responseType: "blob",
+                }
+              );
+
+              const imageUrl = URL.createObjectURL(profilePictureRes.data);
+              profilePictureUrl = imageUrl;
+            } catch (error) {
+              console.warn("No profile picture found. Using default.");
             }
-          );
 
-          const userProfile = await axios.get(
-            "https://graph.microsoft.com/v1.0/me",
+            // Set Profile State
+            setProfile({
+              name: userProfile?.displayName,
+              email: userProfile?.mail || userProfile?.userPrincipalName, // Fallback for missing mail
+              profilePicture: profilePictureUrl,
+            });
 
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          console.log("userProfile", userProfile);
-          const profilePicture = await axios.get(
-            "https://graph.microsoft.com/v1.0/me/photo/$value",
-            {
-              headers: { Authorization: `Bearer ${token}` },
-              responseType: "blob", // Ensures we get an image file
-            }
-          );
-          console.log("profilePicture", profilePicture);
+            // Normalize Emails
+            normalizedEmails =
+              response?.data?.value?.map((email) => ({
+                id: email.id,
+                subject: email.subject,
+                sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
+                receivedAt: email.receivedDateTime,
+                message: email?.body?.content,
+              })) || [];
 
-          const imageUrl = URL.createObjectURL(profilePicture?.data);
-          setProfile({
-            ...userProfile,
-            name: userProfile?.data?.displayName,
-            email: userProfile?.data?.mail,
-          });
-
-          console.log("profile", profile);
-
-          normalizedEmails =
-            response?.data?.value?.map((email) => ({
-              id: email.id,
-              subject: email.subject,
-              sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
-              receivedAt: email.receivedDateTime,
-              message: email?.body?.content,
-            })) || [];
+            console.log("Normalized Emails:", normalizedEmails);
+          } catch (error) {
+            console.error("Error fetching Outlook emails/profile:", error);
+          }
         } else {
           throw new Error("Invalid provider");
         }
