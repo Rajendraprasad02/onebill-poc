@@ -154,27 +154,42 @@ const InvoiceEmails = () => {
       <div className="p-6">
         {/* Skeleton for Profile Section */}
         <div className="w-full flex justify-end items-center gap-2">
-          <Skeleton circle={true} height={40} width={40} />
+          <Skeleton
+            circle={true}
+            height={40}
+            width={40}
+            className="dark:bg-gray-700"
+          />
           <div>
-            <Skeleton width={120} height={20} />
-            <Skeleton width={180} height={16} />
+            <Skeleton width={120} height={20} className="dark:bg-gray-700" />
+            <Skeleton width={180} height={16} className="dark:bg-gray-700" />
           </div>
         </div>
 
-        <h2 className="text-3xl font-bold text-center mb-6">Invoice Emails</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
+          Invoice Emails
+        </h2>
 
         {/* Skeleton for Email List */}
         <ul className="space-y-4 w-full flex justify-center flex-col">
           {[1, 2, 3].map((_, index) => (
             <li
               key={index}
-              className="w-5xl bg-gray-50 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+              className="w-5xl bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
             >
               <div className="flex justify-between items-center">
-                <Skeleton width={200} height={20} />
-                <Skeleton width={150} height={16} />
+                <Skeleton
+                  width={200}
+                  height={20}
+                  className="dark:bg-gray-700"
+                />
+                <Skeleton
+                  width={150}
+                  height={16}
+                  className="dark:bg-gray-700"
+                />
               </div>
-              <Skeleton count={3} className="mt-2" />
+              <Skeleton count={3} className="mt-2 dark:bg-gray-700" />
             </li>
           ))}
         </ul>
@@ -200,16 +215,6 @@ const InvoiceEmails = () => {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <form className="hidden md:block">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
-              <input
-                type="search"
-                placeholder="Search emails..."
-                className="w-[300px] bg-zinc-900 pl-8 text-zinc-100 placeholder:text-zinc-500 border border-zinc-800 rounded-md p-2"
-              />
-            </div>
-          </form>
           <div
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex justify-end items-center gap-2  w-fit p-2 rounded-xl cursor-pointer transition-all"
@@ -260,7 +265,7 @@ const InvoiceEmails = () => {
         )}
         <aside className="hidden md:block w-[240px] border-r border-zinc-800 p-4">
           <nav className="flex flex-col gap-2">
-            {["inbox", "bills", "starred", "archive", "trash"].map((tab) => (
+            {["inbox"].map((tab) => (
               <button
                 key={tab}
                 className={`p-2 text-left ${
