@@ -149,53 +149,53 @@ const InvoiceEmails = () => {
     navigate("/");
   };
 
-  if (loading) {
-    return (
-      <div className="p-6">
-        {/* Skeleton for Profile Section */}
-        <div className="w-full flex justify-end items-center gap-2">
-          <Skeleton
-            circle={true}
-            height={40}
-            width={40}
-            className="dark:bg-gray-700"
-          />
-          <div>
-            <Skeleton width={120} height={20} className="dark:bg-gray-700" />
-            <Skeleton width={180} height={16} className="dark:bg-gray-700" />
-          </div>
-        </div>
+  // if (loading) {
+  //   return (
+  //     <div className="p-6">
+  //       {/* Skeleton for Profile Section */}
+  //       <div className="w-full flex justify-end items-center gap-2">
+  //         <Skeleton
+  //           circle={true}
+  //           height={40}
+  //           width={40}
+  //           className="dark:bg-gray-700"
+  //         />
+  //         <div>
+  //           <Skeleton width={120} height={20} className="dark:bg-gray-700" />
+  //           <Skeleton width={180} height={16} className="dark:bg-gray-700" />
+  //         </div>
+  //       </div>
 
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
-          Invoice Emails
-        </h2>
+  //       <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
+  //         Invoice Emails
+  //       </h2>
 
-        {/* Skeleton for Email List */}
-        <ul className="space-y-4 w-full flex justify-center flex-col">
-          {[1, 2, 3].map((_, index) => (
-            <li
-              key={index}
-              className="w-5xl bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
-            >
-              <div className="flex justify-between items-center">
-                <Skeleton
-                  width={200}
-                  height={20}
-                  className="dark:bg-gray-700"
-                />
-                <Skeleton
-                  width={150}
-                  height={16}
-                  className="dark:bg-gray-700"
-                />
-              </div>
-              <Skeleton count={3} className="mt-2 dark:bg-gray-700" />
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
+  //       {/* Skeleton for Email List */}
+  //       <ul className="space-y-4 w-full flex justify-center flex-col">
+  //         {[1, 2, 3].map((_, index) => (
+  //           <li
+  //             key={index}
+  //             className="w-5xl bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+  //           >
+  //             <div className="flex justify-between items-center">
+  //               <Skeleton
+  //                 width={200}
+  //                 height={20}
+  //                 className="dark:bg-gray-700"
+  //               />
+  //               <Skeleton
+  //                 width={150}
+  //                 height={16}
+  //                 className="dark:bg-gray-700"
+  //               />
+  //             </div>
+  //             <Skeleton count={3} className="mt-2 dark:bg-gray-700" />
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </div>
+  //   );
+  // }
 
   if (error) return <p className="text-red-500">{error}</p>;
 
@@ -283,83 +283,112 @@ const InvoiceEmails = () => {
         <main className="flex-1 overflow-auto p-4">
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
+
           {emails?.length === 0 ? (
             <p className="text-center text-gray-800 dark:text-gray-300">
               No invoice emails found.
             </p>
           ) : (
-            <ul className="space-y-4 w-full flex justify-center flex-col">
-              {emails?.map((email, index) => (
-                <li
-                  key={index}
-                  className="w-7xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
-                  onClick={() => toggleEmailDetail(index)}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-semibold text-xl text-gray-800 dark:text-gray-200">
-                      {email?.sender || "Unknown"}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      {email?.subject || "No Subject"}
-                    </p>
-                  </div>
-
-                  {activeEmailIndex === index && (
-                    <div className="mt-2 text-gray-700 dark:text-gray-300">
-                      <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-                        {Array.isArray(email?.attachments) &&
-                          email.attachments.length > 0 && (
-                            <div className="mt-4">
-                              <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200">
-                                Attachments:
-                              </h4>
-                              <ul className="space-y-3 mt-2">
-                                {email.attachments.map((file, i) => (
-                                  <li
-                                    key={i}
-                                    className="flex justify-between items-center p-2 border-b border-gray-300 dark:border-gray-700"
-                                  >
-                                    <span className="text-gray-800 dark:text-gray-300 font-medium">
-                                      {file.filename || "Unknown File"}
-                                    </span>
-                                    <a
-                                      href={`/api/attachments/${file.attachmentId}`} // Adjust this URL as needed
-                                      download={file.filename}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-blue-500 hover:underline bg-blue-100 dark:bg-blue-900 px-4 py-2 rounded-md"
-                                    >
-                                      Download
-                                    </a>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-
-                        <strong className="text-gray-800 dark:text-gray-200">
-                          Message:
-                        </strong>
-                        {email?.message ? (
-                          <div
-                            className="mt-2"
-                            dangerouslySetInnerHTML={{
-                              __html: DOMPurify.sanitize(
-                                email?.message?.trim()
-                              ),
-                            }}
+            <>
+              {loading && (
+                <>
+                  <ul className="space-y-4 w-full flex justify-center flex-col">
+                    {[1, 2, 3].map((_, index) => (
+                      <li
+                        key={index}
+                        className="w-5xl bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                      >
+                        <div className="flex justify-between items-center">
+                          <Skeleton
+                            width={200}
+                            height={20}
+                            className="dark:bg-gray-700"
                           />
-                        ) : (
-                          <p className="dark:text-gray-400">
-                            No message content available.
-                          </p>
-                        )}
-                      </div>
+                          <Skeleton
+                            width={150}
+                            height={16}
+                            className="dark:bg-gray-700"
+                          />
+                        </div>
+                        <Skeleton count={3} className="mt-2 dark:bg-gray-700" />
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+              <ul className="space-y-4 w-full flex justify-center flex-col">
+                {emails?.map((email, index) => (
+                  <li
+                    key={index}
+                    className="w-7xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                    onClick={() => toggleEmailDetail(index)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-semibold text-xl text-gray-800 dark:text-gray-200">
+                        {email?.sender || "Unknown"}
+                      </h3>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        {email?.subject || "No Subject"}
+                      </p>
                     </div>
-                  )}
-                </li>
-              ))}
-            </ul>
+
+                    {activeEmailIndex === index && (
+                      <div className="mt-2 text-gray-700 dark:text-gray-300">
+                        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                          {Array.isArray(email?.attachments) &&
+                            email.attachments.length > 0 && (
+                              <div className="mt-4">
+                                <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200">
+                                  Attachments:
+                                </h4>
+                                <ul className="space-y-3 mt-2">
+                                  {email.attachments.map((file, i) => (
+                                    <li
+                                      key={i}
+                                      className="flex justify-between items-center p-2 border-b border-gray-300 dark:border-gray-700"
+                                    >
+                                      <span className="text-gray-800 dark:text-gray-300 font-medium">
+                                        {file.filename || "Unknown File"}
+                                      </span>
+                                      <a
+                                        href={`/api/attachments/${file.attachmentId}`} // Adjust this URL as needed
+                                        download={file.filename}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-500 hover:underline bg-blue-100 dark:bg-blue-900 px-4 py-2 rounded-md"
+                                      >
+                                        Download
+                                      </a>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                          <strong className="text-gray-800 dark:text-gray-200">
+                            Message:
+                          </strong>
+                          {email?.message ? (
+                            <div
+                              className="mt-2"
+                              dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(
+                                  email?.message?.trim()
+                                ),
+                              }}
+                            />
+                          ) : (
+                            <p className="dark:text-gray-400">
+                              No message content available.
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </main>
       </div>
