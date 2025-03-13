@@ -97,7 +97,7 @@ const InvoiceEmails = () => {
             })) || [];
         } else if (provider === "outlook") {
           response = await axios.get(
-            "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+            "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
             {
               headers: { Authorization: `Bearer ${token}` },
             }
