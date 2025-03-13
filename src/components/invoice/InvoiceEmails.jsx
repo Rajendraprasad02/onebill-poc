@@ -34,9 +34,11 @@ const InvoiceEmails = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
+  const provider = queryParams.get("provider");
 
   console.log("queryParamsqueryParams", queryParams);
   console.log("tokentoken", token);
+  console.log("providerprovider", provider);
 
   useEffect(() => {
     if (!token) {
