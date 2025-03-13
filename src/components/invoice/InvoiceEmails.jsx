@@ -15,6 +15,27 @@ const InvoiceEmails = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const [gmailToken, setGmailToken] = useState(null);
+  const [yahooToken, setYahooToken] = useState(null);
+  const [outlookToken, setOutlookToken] = useState(null);
+
+  useEffect(() => {
+    if (token && provider) {
+      switch (provider) {
+        case "gmail":
+          setGmailToken(token);
+          break;
+        case "yahoo":
+          setYahooToken(token);
+          break;
+        case "outlook":
+          setOutlookToken(token);
+          break;
+        default:
+          console.warn("Unknown provider:", provider);
+      }
+    }
+  }, [token, provider]); // Runs when token or provider changes
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -34,51 +55,49 @@ const InvoiceEmails = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
+  const provider = queryParams.get("provider");
 
-  console.log("queryParamsqueryParams", queryParams);
-  console.log("tokentoken", token);
+  // useEffect(() => {
+  //   if (!token) {
+  //     setError("No token found.");
+  //     setLoading(false);
+  //     return;
+  //   }
 
-  useEffect(() => {
-    if (!token) {
-      setError("No token found.");
-      setLoading(false);
-      return;
-    }
+  //   // const fetchEmails = async () => {
+  //   //   try {
+  //   //     const response = await axios.get(
+  //   //       `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
+  //   //       // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+  //   //     );
+  //   //     setEmails(response?.data?.emails || []);
+  //   //     setProfile(response?.data?.userInfo || {});
+  //   //   } catch (err) {
+  //   //     setError("Failed to fetch emails.");
+  //   //   }
+  //   //   setLoading(false);
+  //   // };
 
-    // const fetchEmails = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
-    //       // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
-    //     );
-    //     setEmails(response?.data?.emails || []);
-    //     setProfile(response?.data?.userInfo || {});
-    //   } catch (err) {
-    //     setError("Failed to fetch emails.");
-    //   }
-    //   setLoading(false);
-    // };
+  //   const fetchEmails = async (token) => {
+  //     try {
+  //       const response = await axios.get(
+  //         "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+  //         {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       );
+  //       console.log("responseresponse", response);
 
-    const fetchEmails = async (token) => {
-      try {
-        const response = await axios.get(
-          "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        console.log("responseresponse", response);
+  //       setEmails(response.data.value);
+  //     } catch (error) {
+  //       console.error("Error fetching emails:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-        setEmails(response.data.value);
-      } catch (error) {
-        console.error("Error fetching emails:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEmails(token);
-  }, [token]);
+  //   fetchEmails(token);
+  // }, [token]);
 
   const toggleEmailDetail = (index) => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
@@ -200,17 +219,19 @@ const InvoiceEmails = () => {
     const fetchAllEmails = async () => {
       setLoading(true);
       try {
-        const [gmailEmails, yahooEmails, outlookEmails] = await Promise.all([
-          fetchEmails("gmail", gmailToken),
-          fetchEmails("yahoo", yahooToken),
-          fetchEmails("outlook", outlookToken),
-        ]);
+        const fetchPromises = [];
 
-        const allEmails = [
-          ...gmailEmails,
-          ...yahooEmails,
-          ...outlookEmails,
-        ].sort((a, b) => new Date(b.date) - new Date(a.date));
+        if (gmailToken) fetchPromises.push(fetchEmails("gmail", gmailToken));
+        if (yahooToken) fetchPromises.push(fetchEmails("yahoo", yahooToken));
+        if (outlookToken)
+          fetchPromises.push(fetchEmails("outlook", outlookToken));
+
+        const emailResults = await Promise.all(fetchPromises);
+
+        // Flatten the results since fetchPromises might have a variable number of elements
+        const allEmails = emailResults
+          .flat()
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
 
         setEmails(allEmails);
       } catch (err) {
@@ -220,7 +241,7 @@ const InvoiceEmails = () => {
     };
 
     fetchAllEmails();
-  }, []);
+  }, [gmailToken, yahooToken, outlookToken]); // Dependencies updated
 
   console.log("gmailEmails", gmailEmails);
   console.log("yahooEmails", yahooEmails);
