@@ -264,7 +264,7 @@ const InvoiceEmails = () => {
               No invoice emails found.
             </p>
           ) : (
-            <ul className="space-y-4 w-full flex justify-center flex-col">
+            <ul className="w-full flex justify-center flex-col">
               {emails?.map((email, index) => (
                 <li
                   key={index}
