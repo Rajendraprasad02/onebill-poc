@@ -54,7 +54,7 @@ const InvoiceEmails = () => {
           );
           console.log("response", response);
 
-          const userProfile = response?.userInfo;
+          const userProfile = response?.data?.userInfo;
           console.log("profile", userProfile);
 
           setProfile(userProfile);
