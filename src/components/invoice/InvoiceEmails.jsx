@@ -216,6 +216,11 @@ const InvoiceEmails = () => {
 
   useEffect(() => {
     const fetchAllEmails = async () => {
+      console.log("in fetch all emails");
+      console.log("gmailToken", gmailToken);
+      console.log("yahooToken", yahooToken);
+      console.log("outlookToken", outlookToken);
+
       setLoading(true);
       try {
         const fetchPromises = [];
