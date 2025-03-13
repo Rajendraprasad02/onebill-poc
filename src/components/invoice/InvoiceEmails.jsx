@@ -146,7 +146,6 @@ const InvoiceEmails = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
     navigate("/");
   };
 
@@ -213,7 +212,7 @@ const InvoiceEmails = () => {
           </form>
           <div
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex justify-end items-center gap-2 bg-slate-50 dark:bg-gray-800 w-fit p-2 rounded-xl cursor-pointer transition-all"
+            className="flex justify-end items-center gap-2  w-fit p-2 rounded-xl cursor-pointer transition-all"
           >
             {profile?.profilePicture && (
               <img
@@ -233,7 +232,7 @@ const InvoiceEmails = () => {
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 text-zinc-400 hover:text-zinc-100"
+            className="p-2 text-zinc-400 hover:text-zinc-100 cursor-pointer"
           >
             <LogOut className="h-5 w-5" />
           </button>
@@ -288,7 +287,7 @@ const InvoiceEmails = () => {
               {emails?.map((email, index) => (
                 <li
                   key={index}
-                  className="w-8xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                  className="w-7xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
                   onClick={() => toggleEmailDetail(index)}
                 >
                   <div className="flex justify-between items-center">
