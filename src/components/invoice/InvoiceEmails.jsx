@@ -152,7 +152,7 @@ const InvoiceEmails = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
+    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
       <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
         <div className="flex items-center gap-4">
           <button
