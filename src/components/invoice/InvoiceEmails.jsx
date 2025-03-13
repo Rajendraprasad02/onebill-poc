@@ -35,6 +35,9 @@ const InvoiceEmails = () => {
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
 
+  console.log("queryParamsqueryParams", queryParams);
+  console.log("tokentoken", token);
+
   useEffect(() => {
     if (!token) {
       setError("No token found.");
@@ -42,21 +45,39 @@ const InvoiceEmails = () => {
       return;
     }
 
-    const fetchEmails = async () => {
+    // const fetchEmails = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
+    //       // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+    //     );
+    //     setEmails(response?.data?.emails || []);
+    //     setProfile(response?.data?.userInfo || {});
+    //   } catch (err) {
+    //     setError("Failed to fetch emails.");
+    //   }
+    //   setLoading(false);
+    // };
+
+    const fetchEmails = async (token) => {
       try {
         const response = await axios.get(
-          `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
-          // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+          "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
-        setEmails(response?.data?.emails || []);
-        setProfile(response?.data?.userInfo || {});
-      } catch (err) {
-        setError("Failed to fetch emails.");
+        console.log("responseresponse", response);
+
+        setEmails(response.data.value);
+      } catch (error) {
+        console.error("Error fetching emails:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    fetchEmails();
+    fetchEmails(token);
   }, [token]);
 
   const toggleEmailDetail = (index) => {
