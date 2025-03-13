@@ -52,6 +52,7 @@ const InvoiceEmails = () => {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
+          console.log("response", response);
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
