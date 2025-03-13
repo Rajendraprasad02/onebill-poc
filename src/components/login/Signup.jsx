@@ -14,14 +14,16 @@ const Signup = () => {
 
   const handleOAuthLogin = (provider) => {
     console.log(`Signing up with ${provider}`);
-    // window.location.href = `https://onebill-poc-backend-production.up.railway.app/api/${provider}`;
-    window.location.href = `http://localhost:3000/api/${provider}`;
+    window.location.href = `https://onebill-poc-backend-production.up.railway.app/api/${provider}`;
+    // window.location.href = `http://localhost:3000/api/${provider}`;
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center md:text-blue-400">
+          Sign Up
+        </h2>
 
         <form onSubmit={handleSignup}>
           <div className="mb-4">
