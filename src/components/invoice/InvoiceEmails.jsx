@@ -52,6 +52,8 @@ const InvoiceEmails = () => {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
+          console.log("response", response);
+
           const userProfile = response?.userInfo;
           console.log("profile", userProfile);
 
