@@ -75,15 +75,15 @@ const InvoiceEmails = () => {
             }
           );
 
-          // profile = await axios.get(
-          //   "https://graph.microsoft.com/v1.0/me",
+          profile = await axios.get(
+            "https://graph.microsoft.com/v1.0/me",
 
-          //   {
-          //     headers: { Authorization: `Bearer ${token}` },
-          //   }
-          // );
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
-          // console.log("profile", profile);
+          console.log("profile", profile);
 
           normalizedEmails =
             response?.data?.value?.map((email) => ({
