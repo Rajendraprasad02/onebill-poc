@@ -59,25 +59,59 @@ const InvoiceEmails = () => {
     //   setLoading(false);
     // };
 
-    const fetchEmails = async (token) => {
+    const fetchEmailsAndProfile = async (token) => {
       try {
-        const response = await axios.get(
+        // Fetch profile details
+        const profileResponse = await axios.get(
+          "https://graph.microsoft.com/v1.0/me",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        console.log("Profile Response:", profileResponse);
+        setProfile({
+          name: profileResponse.data.displayName,
+          email:
+            profileResponse.data.mail || profileResponse.data.userPrincipalName,
+          profilePicture: null, // We'll fetch this separately
+        });
+
+        // Fetch profile picture
+        try {
+          const photoResponse = await axios.get(
+            "https://graph.microsoft.com/v1.0/me/photo/$value",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              responseType: "blob",
+            }
+          );
+
+          const imageUrl = URL.createObjectURL(photoResponse.data);
+          setProfile((prev) => ({ ...prev, profilePicture: imageUrl }));
+        } catch (photoError) {
+          console.warn("No profile picture found");
+        }
+
+        // Fetch emails
+        const emailResponse = await axios.get(
           "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("responseresponse", response);
 
-        setEmails(response.data.value);
+        console.log("Email Response:", emailResponse);
+        setEmails(emailResponse.data.value);
       } catch (error) {
-        console.error("Error fetching emails:", error);
+        console.error("Error fetching data:", error);
+        setError("Failed to fetch emails or profile details.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmails(token);
+    fetchEmailsAndProfile(token);
   }, [token]);
 
   const toggleEmailDetail = (index) => {
