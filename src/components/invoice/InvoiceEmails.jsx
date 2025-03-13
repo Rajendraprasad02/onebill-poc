@@ -232,7 +232,7 @@ const InvoiceEmails = () => {
             ))}
           </nav>
         </aside>
-        <main className="flex-1 overflow-auto p-4">
+        <main className="flex-1 p-4">
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
 
@@ -242,7 +242,7 @@ const InvoiceEmails = () => {
             </p>
           ) : (
             <>
-              <ul className="space-y-4 w-full flex flex-col h-screen overflow-scroll  overflow-y-hidden p-2">
+              <ul className="space-y-4 w-full flex flex-col h-screen overflow-scroll  overflow-x-hidden p-2">
                 {emails?.map((email, index) => (
                   <li
                     key={index}
