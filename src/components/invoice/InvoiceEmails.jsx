@@ -184,10 +184,7 @@ const InvoiceEmails = () => {
       let response;
       if (provider === "gmail") {
         response = await axios.get(
-          "https://www.googleapis.com/gmail/v1/users/me/messages",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
         );
       } else if (provider === "yahoo") {
         response = await axios.get(
