@@ -242,7 +242,7 @@ const InvoiceEmails = () => {
             </p>
           ) : (
             <>
-              <ul className="space-y-4 w-full flex flex-col h-screen overflow-scroll bg-white">
+              <ul className="space-y-4 w-full flex flex-col h-screen overflow-scroll  overflow-y-hidden p-2">
                 {emails?.map((email, index) => (
                   <li
                     key={index}
