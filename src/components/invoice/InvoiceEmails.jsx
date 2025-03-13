@@ -124,6 +124,108 @@ const InvoiceEmails = () => {
 
   if (error) return <p className="text-red-500">{error}</p>;
 
+  const normalizeEmail = (email, provider) => {
+    switch (provider) {
+      case "gmail":
+        return {
+          id: email.id,
+          from:
+            email?.payload?.headers?.find((h) => h.name === "From")?.value ||
+            "Unknown",
+          subject: email?.snippet || "No Subject",
+          body: email?.payload?.body?.data || "No Content",
+          attachments: email?.payload?.parts?.filter((p) => p.filename) || [],
+        };
+
+      case "yahoo":
+        return {
+          id: email.messageId,
+          from: email?.from?.emailAddress?.address || "Unknown",
+          subject: email?.subject || "No Subject",
+          body: email?.body?.content || "No Content",
+          attachments: email?.attachments || [],
+        };
+
+      case "outlook":
+        return {
+          id: email.id,
+          from: email?.from?.emailAddress?.address || "Unknown",
+          subject: email?.subject || "No Subject",
+          body: email?.body?.content || "No Content",
+          attachments: email?.attachments || [],
+        };
+
+      default:
+        return email;
+    }
+  };
+
+  const fetchEmails = async (provider, token) => {
+    try {
+      let response;
+      if (provider === "gmail") {
+        response = await axios.get(
+          "https://www.googleapis.com/gmail/v1/users/me/messages",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      } else if (provider === "yahoo") {
+        response = await axios.get(
+          "https://some-yahoo-api-endpoint.com/emails",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      } else if (provider === "outlook") {
+        response = await axios.get(
+          "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
+
+      const emails = response.data.value.map((email) =>
+        normalizeEmail(email, provider)
+      );
+      return emails;
+    } catch (error) {
+      console.error(`Error fetching ${provider} emails:`, error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchAllEmails = async () => {
+      setLoading(true);
+      try {
+        const [gmailEmails, yahooEmails, outlookEmails] = await Promise.all([
+          fetchEmails("gmail", gmailToken),
+          fetchEmails("yahoo", yahooToken),
+          fetchEmails("outlook", outlookToken),
+        ]);
+
+        const allEmails = [
+          ...gmailEmails,
+          ...yahooEmails,
+          ...outlookEmails,
+        ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        setEmails(allEmails);
+      } catch (err) {
+        setError("Failed to fetch emails.");
+      }
+      setLoading(false);
+    };
+
+    fetchAllEmails();
+  }, []);
+
+  console.log("gmailEmails", gmailEmails);
+  console.log("yahooEmails", yahooEmails);
+  console.log("outlookEmails", outlookEmails);
+
   return (
     <div className="p-6">
       {/* Profile Section */}
