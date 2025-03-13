@@ -85,11 +85,14 @@ const InvoiceEmails = () => {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
+
           normalizedEmails =
-            response?.data?.emails?.map((email) => ({
-              id: email.id,
-              subject: emails?.subject,
-              sender: emails?.from,
+            response?.data?.emails?.map((email, index) => ({
+              id: index, // Use index as a temporary ID if the API doesn't provide one
+              subject: email?.subject, // Fix variable reference
+              sender: email?.from, // Fix variable reference
+              messageBody: email?.messageBody, // Include message body
+              attachments: email?.attachments || [], // Ensure attachments are included
             })) || [];
         } else if (provider === "outlook") {
           response = await axios.get(
