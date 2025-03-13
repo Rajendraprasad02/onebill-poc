@@ -7,7 +7,7 @@ import InvoiceEmails from "./components/invoice/InvoiceEmails";
 import SetPassword from "./components/login/SetPassword";
 
 const router = createHashRouter([
-  { path: "/", element: <Login /> },
+  { path: "/", element: <Signup /> },
   { path: "/signup", element: <Signup /> },
   { path: "/invoice-emails", element: <InvoiceEmails /> },
   { path: "/set-password", element: <SetPassword /> },
