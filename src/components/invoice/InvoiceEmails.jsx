@@ -47,14 +47,50 @@ const InvoiceEmails = () => {
       return;
     }
 
+    // const fetchEmails = async () => {
+    //   try {
+    //     let response;
+
+    //     if (provider === "google") {
+    //       response = await axios.get(
+    //         `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+    //       );
+    //     } else if (provider === "outlook") {
+    //       response = await axios.get(
+    //         "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+    //         {
+    //           headers: { Authorization: `Bearer ${token}` },
+    //         }
+    //       );
+    //     } else {
+    //       throw new Error("Invalid provider");
+    //     }
+
+    //     console.log("Response:", response);
+    //     setEmails(response?.data?.emails || response?.data?.value || []);
+    //   } catch (error) {
+    //     console.error("Error fetching emails:", error);
+    //     setError("Failed to fetch emails.");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+
     const fetchEmails = async () => {
       try {
         let response;
+        let normalizedEmails = [];
 
         if (provider === "google") {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
+          normalizedEmails =
+            response?.data?.emails?.map((email) => ({
+              id: email.id,
+              subject: emails?.subject,
+              sender: emails?.from,
+            })) || [];
         } else if (provider === "outlook") {
           response = await axios.get(
             "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
@@ -62,12 +98,18 @@ const InvoiceEmails = () => {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
+          normalizedEmails =
+            response?.data?.value?.map((email) => ({
+              id: email.id,
+              subject: email.subject,
+              sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
+              receivedAt: email.receivedDateTime,
+            })) || [];
         } else {
           throw new Error("Invalid provider");
         }
 
-        console.log("Response:", response);
-        setEmails(response?.data?.emails || response?.data?.value || []);
+        setEmails(normalizedEmails);
       } catch (error) {
         console.error("Error fetching emails:", error);
         setError("Failed to fetch emails.");
