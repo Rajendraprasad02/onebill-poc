@@ -260,40 +260,42 @@ const InvoiceEmails = () => {
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
           {emails?.length === 0 ? (
-            <p className="text-center">No invoice emails found.</p>
+            <p className="text-center text-gray-800 dark:text-gray-300">
+              No invoice emails found.
+            </p>
           ) : (
             <ul className="space-y-4 w-full flex justify-center flex-col">
               {emails?.map((email, index) => (
                 <li
                   key={index}
-                  className="w-5xl bg-gray-50 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                  className="w-5xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
                   onClick={() => toggleEmailDetail(index)}
                 >
                   <div className="flex justify-between items-center">
-                    <h3 className="font-semibold text-xl text-gray-800">
+                    <h3 className="font-semibold text-xl text-gray-800 dark:text-gray-200">
                       From: {email?.sender || "Unknown"}
                     </h3>
-                    <p className="text-gray-500">
+                    <p className="text-gray-500 dark:text-gray-400">
                       {email?.subject || "No Subject"}
                     </p>
                   </div>
 
                   {activeEmailIndex === index && (
-                    <div className="mt-2 text-gray-700">
-                      <div className="bg-gray-100 p-4 rounded">
+                    <div className="mt-2 text-gray-700 dark:text-gray-300">
+                      <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
                         {Array.isArray(email?.attachments) &&
                           email.attachments.length > 0 && (
                             <div className="mt-4">
-                              <h4 className="font-semibold text-lg">
+                              <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200">
                                 Attachments:
                               </h4>
                               <ul className="space-y-3 mt-2">
                                 {email.attachments.map((file, i) => (
                                   <li
                                     key={i}
-                                    className="flex justify-between items-center p-2 border-b border-gray-300"
+                                    className="flex justify-between items-center p-2 border-b border-gray-300 dark:border-gray-700"
                                   >
-                                    <span className="text-gray-800 font-medium">
+                                    <span className="text-gray-800 dark:text-gray-300 font-medium">
                                       {file.filename || "Unknown File"}
                                     </span>
                                     <a
@@ -301,7 +303,7 @@ const InvoiceEmails = () => {
                                       download={file.filename}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-blue-500 hover:underline bg-blue-100 px-4 py-2 rounded-md"
+                                      className="text-blue-500 hover:underline bg-blue-100 dark:bg-blue-900 px-4 py-2 rounded-md"
                                     >
                                       Download
                                     </a>
@@ -311,7 +313,9 @@ const InvoiceEmails = () => {
                             </div>
                           )}
 
-                        <strong>Message:</strong>
+                        <strong className="text-gray-800 dark:text-gray-200">
+                          Message:
+                        </strong>
                         {email?.message ? (
                           <div
                             className="mt-2"
@@ -322,7 +326,9 @@ const InvoiceEmails = () => {
                             }}
                           />
                         ) : (
-                          <p>No message content available.</p>
+                          <p className="dark:text-gray-400">
+                            No message content available.
+                          </p>
                         )}
                       </div>
                     </div>
