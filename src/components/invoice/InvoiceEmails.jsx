@@ -242,11 +242,11 @@ const InvoiceEmails = () => {
             </p>
           ) : (
             <>
-              <ul className="space-y-4 w-full flex flex-col h-screen overflow-y-auto overflow-x-hidden p-2 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-300 dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-900">
+              <ul className="space-y-4 w-full flex flex-col ">
                 {emails?.map((email, index) => (
                   <li
                     key={index}
-                    className="w-7xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                    className="w-7xl h-48 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
                     onClick={() => toggleEmailDetail(index)}
                   >
                     <div className="flex justify-between items-center">
