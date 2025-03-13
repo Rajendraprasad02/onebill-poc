@@ -4,7 +4,7 @@ import axios from "axios";
 import DOMPurify from "dompurify";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Menu, Receipt, Search } from "lucide-react";
+import { LogOut, Menu, Receipt, Search } from "lucide-react";
 
 const InvoiceEmails = () => {
   const [emails, setEmails] = useState([]);
