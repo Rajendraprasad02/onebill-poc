@@ -222,13 +222,20 @@ const InvoiceEmails = () => {
       setLoading(true);
       try {
         const fetchPromises = [];
+        console.log("innn");
 
         if (gmailToken) fetchPromises.push(fetchEmails("gmail", gmailToken));
+        console.log("innn - 1");
+
         if (yahooToken) fetchPromises.push(fetchEmails("yahoo", yahooToken));
+        console.log("innn - 2");
+
         if (outlookToken)
           fetchPromises.push(fetchEmails("outlook", outlookToken));
+        console.log("innn - 3");
 
         const emailResults = await Promise.all(fetchPromises);
+        console.log("emailResults", emailResults);
 
         // Flatten the results since fetchPromises might have a variable number of elements
         const allEmails = emailResults
@@ -240,8 +247,9 @@ const InvoiceEmails = () => {
         setEmails(allEmails);
       } catch (err) {
         setError("Failed to fetch emails.");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchAllEmails();
