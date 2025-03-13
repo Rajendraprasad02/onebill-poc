@@ -83,16 +83,16 @@ const InvoiceEmails = () => {
             }
           );
           console.log("userProfile", userProfile);
-          const response = await axios.get(
+          const profilePicture = await axios.get(
             "https://graph.microsoft.com/v1.0/me/photo/$value",
             {
               headers: { Authorization: `Bearer ${token}` },
               responseType: "blob", // Ensures we get an image file
             }
           );
-          console.log("response", response);
+          console.log("profilePicture", profilePicture);
 
-          const imageUrl = URL.createObjectURL(response.data);
+          const imageUrl = URL.createObjectURL(profilePicture?.data);
           setProfile({
             ...userProfile,
             name: userProfile?.data?.displayName,
