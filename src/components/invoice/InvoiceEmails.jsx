@@ -110,6 +110,7 @@ const InvoiceEmails = () => {
               subject: email.subject,
               sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
               receivedAt: email.receivedDateTime,
+              message: email?.body?.content,
             })) || [];
         } else {
           throw new Error("Invalid provider");
@@ -224,7 +225,7 @@ const InvoiceEmails = () => {
             >
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold text-xl text-gray-800">
-                  From: {email?.from?.emailAddress?.address || "Unknown"}
+                  From: {email?.sender || "Unknown"}
                 </h3>
                 <p className="text-gray-500">
                   {email?.subject || "No Subject"}
