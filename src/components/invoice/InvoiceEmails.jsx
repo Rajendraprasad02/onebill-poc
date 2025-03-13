@@ -266,11 +266,11 @@ const InvoiceEmails = () => {
                       )}
 
                     <strong>Message:</strong>
-                    {email?.body?.content ? (
+                    {email?.message ? (
                       <div
                         className="mt-2"
                         dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(email?.body?.trim()),
+                          __html: DOMPurify.sanitize(email?.message?.trim()),
                         }}
                       />
                     ) : (
