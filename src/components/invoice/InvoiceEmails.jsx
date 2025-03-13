@@ -6,6 +6,11 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const InvoiceEmails = () => {
+  // Extract token from URL
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get("token");
+  const provider = queryParams.get("provider");
   const [emails, setEmails] = useState([]);
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
@@ -50,12 +55,6 @@ const InvoiceEmails = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  // Extract token from URL
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get("token");
-  const provider = queryParams.get("provider");
 
   // useEffect(() => {
   //   if (!token) {
