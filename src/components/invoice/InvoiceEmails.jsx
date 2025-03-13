@@ -52,10 +52,10 @@ const InvoiceEmails = () => {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
-          profile = response?.userInfo;
-          console.log("profile", profile);
+          const userProfile = response?.userInfo;
+          console.log("profile", userProfile);
 
-          setProfile(profile);
+          setProfile(userProfile);
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
