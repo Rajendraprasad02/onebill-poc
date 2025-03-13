@@ -12,6 +12,7 @@ const InvoiceEmails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeEmailIndex, setActiveEmailIndex] = useState(null); // Track expanded email
+  const [activeTab, setActiveTab] = useState("inbox");
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
