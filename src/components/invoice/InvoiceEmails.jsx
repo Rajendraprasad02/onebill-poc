@@ -47,40 +47,37 @@ const InvoiceEmails = () => {
       return;
     }
 
-    // const fetchEmails = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `https://onebill-poc-backend-production.up.railway.app/api/yahoo/emails?token=${token}`
-    //       // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
-    //     );
-    //     setEmails(response?.data?.emails || []);
-    //     setProfile(response?.data?.userInfo || {});
-    //   } catch (err) {
-    //     setError("Failed to fetch emails.");
-    //   }
-    //   setLoading(false);
-    // };
-
-    const fetchEmails = async (token) => {
+    const fetchEmails = async () => {
       try {
-        const response = await axios.get(
-          "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        console.log("responseresponse", response);
+        let response;
 
-        setEmails(response.data.value);
+        if (provider === "google") {
+          response = await axios.get(
+            `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+          );
+        } else if (provider === "outlook") {
+          response = await axios.get(
+            "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+        } else {
+          throw new Error("Invalid provider");
+        }
+
+        console.log("Response:", response);
+        setEmails(response?.data?.emails || response?.data?.value || []);
       } catch (error) {
         console.error("Error fetching emails:", error);
+        setError("Failed to fetch emails.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmails(token);
-  }, [token]);
+    fetchEmails();
+  }, [token, provider]);
 
   const toggleEmailDetail = (index) => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
