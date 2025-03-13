@@ -175,6 +175,7 @@ const InvoiceEmails = () => {
         };
 
       default:
+        console.log("email", email);
         return email;
     }
   };
@@ -205,6 +206,8 @@ const InvoiceEmails = () => {
         );
       }
 
+      console.log("response", response);
+
       const emails = response.data.value.map((email) =>
         normalizeEmail(email, provider)
       );
@@ -232,6 +235,8 @@ const InvoiceEmails = () => {
         const allEmails = emailResults
           .flat()
           .sort((a, b) => new Date(b.date) - new Date(a.date));
+        console.log("fetchPromises", fetchPromises);
+        console.log("allEmails", allEmails);
 
         setEmails(allEmails);
       } catch (err) {
