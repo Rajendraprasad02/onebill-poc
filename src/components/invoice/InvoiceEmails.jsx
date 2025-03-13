@@ -216,7 +216,7 @@ const InvoiceEmails = () => {
                       )}
 
                     <strong>Message:</strong>
-                    {email?.messageBody ? (
+                    {email?.body?.content ? (
                       <div
                         className="mt-2"
                         dangerouslySetInnerHTML={{
