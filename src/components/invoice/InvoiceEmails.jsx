@@ -86,10 +86,9 @@ const InvoiceEmails = () => {
             );
 
             const userProfile = userProfileRes.data;
-            console.log("User Profile:", userProfile);
 
-            // Attempt to Fetch Profile Picture
-            let profilePictureUrl = "https://via.placeholder.com/150"; // Default Image
+            let profilePictureUrl =
+              "https://static.vecteezy.com/system/resources/previews/009/734/564/non_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"; // Default Image
             try {
               const profilePictureRes = await axios.get(
                 "https://graph.microsoft.com/v1.0/me/photo/$value",
@@ -121,8 +120,6 @@ const InvoiceEmails = () => {
                 receivedAt: email.receivedDateTime,
                 message: email?.body?.content,
               })) || [];
-
-            console.log("Normalized Emails:", normalizedEmails);
           } catch (error) {
             console.error("Error fetching Outlook emails/profile:", error);
           }
