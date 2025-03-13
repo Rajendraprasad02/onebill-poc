@@ -115,6 +115,8 @@ const InvoiceEmails = () => {
           throw new Error("Invalid provider");
         }
 
+        console.log("normalizedEmails", normalizedEmails);
+
         setEmails(normalizedEmails);
       } catch (error) {
         console.error("Error fetching emails:", error);
