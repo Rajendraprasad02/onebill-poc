@@ -211,6 +211,26 @@ const InvoiceEmails = () => {
               />
             </div>
           </form>
+          <div
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex justify-end items-center gap-2 bg-slate-50 dark:bg-gray-800 w-fit p-2 rounded-xl cursor-pointer transition-all"
+          >
+            {profile?.profilePicture && (
+              <img
+                className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-700"
+                src={profile?.profilePicture}
+                alt="Profile"
+              />
+            )}
+            <div>
+              <h1 className="font-bold text-gray-800 dark:text-gray-200">
+                {profile?.name || "User"}
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                {profile?.email || "No Email"}
+              </p>
+            </div>
+          </div>
           <button
             onClick={handleLogout}
             className="p-2 text-zinc-400 hover:text-zinc-100"
@@ -264,11 +284,11 @@ const InvoiceEmails = () => {
               No invoice emails found.
             </p>
           ) : (
-            <ul className="w-full flex justify-center flex-col">
+            <ul className="space-y-4 w-full flex justify-center flex-col">
               {emails?.map((email, index) => (
                 <li
                   key={index}
-                  className="w-5xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
+                  className="w-8xl bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
                   onClick={() => toggleEmailDetail(index)}
                 >
                   <div className="flex justify-between items-center">
