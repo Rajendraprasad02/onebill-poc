@@ -175,7 +175,7 @@ const InvoiceEmails = () => {
             >
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold text-xl text-gray-800">
-                  From: {email?.from || "Unknown"}
+                  From: {email?.from?.emailAddress?.address || "Unknown"}
                 </h3>
                 <p className="text-gray-500">
                   {email?.subject || "No Subject"}
