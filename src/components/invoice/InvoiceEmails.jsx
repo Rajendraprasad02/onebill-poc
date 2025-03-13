@@ -36,45 +36,12 @@ const InvoiceEmails = () => {
   const token = queryParams.get("token");
   const provider = queryParams.get("provider");
 
-  console.log("queryParamsqueryParams", queryParams);
-  console.log("tokentoken", token);
-  console.log("providerprovider", provider);
-
   useEffect(() => {
     if (!token) {
       setError("No token found.");
       setLoading(false);
       return;
     }
-
-    // const fetchEmails = async () => {
-    //   try {
-    //     let response;
-
-    //     if (provider === "google") {
-    //       response = await axios.get(
-    //         `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
-    //       );
-    //     } else if (provider === "outlook") {
-    //       response = await axios.get(
-    //         "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages",
-    //         {
-    //           headers: { Authorization: `Bearer ${token}` },
-    //         }
-    //       );
-    //     } else {
-    //       throw new Error("Invalid provider");
-    //     }
-
-    //     console.log("Response:", response);
-    //     setEmails(response?.data?.emails || response?.data?.value || []);
-    //   } catch (error) {
-    //     console.error("Error fetching emails:", error);
-    //     setError("Failed to fetch emails.");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
 
     const fetchEmails = async () => {
       try {
@@ -85,7 +52,6 @@ const InvoiceEmails = () => {
           response = await axios.get(
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
-          console.log("response", response);
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
@@ -102,7 +68,16 @@ const InvoiceEmails = () => {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
-          console.log("response", response);
+
+          profile = await axios.get(
+            "https://graph.microsoft.com/v1.0/me",
+
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          console.log("profile", profile);
 
           normalizedEmails =
             response?.data?.value?.map((email) => ({
@@ -115,8 +90,6 @@ const InvoiceEmails = () => {
         } else {
           throw new Error("Invalid provider");
         }
-
-        console.log("normalizedEmails", normalizedEmails);
 
         setEmails(normalizedEmails);
       } catch (error) {
