@@ -236,6 +236,8 @@ const InvoiceEmails = () => {
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
 
+          {console.log(emails, "emialll")}
+
           {emails?.length === 0 ? (
             <p className="text-center text-gray-800 dark:text-gray-300">
               No invoice emails found.
