@@ -153,7 +153,7 @@ const InvoiceEmails = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
-      <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
+      {/* <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -194,7 +194,8 @@ const InvoiceEmails = () => {
             <LogOut className="h-5 w-5" />
           </button>
         </div>
-      </header>
+      </header> */}
+
       <div className="flex flex-1">
         {menuOpen && (
           <aside className="w-[240px] bg-zinc-900 p-4 border-r border-zinc-800 md:hidden">
@@ -235,8 +236,6 @@ const InvoiceEmails = () => {
         <main className="flex-1 overflow-auto p-4">
           <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
           <div className="my-4 border-t border-zinc-800"></div>
-
-          {console.log(emails?.length, "emialll")}
 
           {emails?.length === 0 ? (
             <p className="text-center text-gray-800 dark:text-gray-300">

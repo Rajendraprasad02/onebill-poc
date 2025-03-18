@@ -1,4 +1,5 @@
 import { LogOut, Menu, Receipt } from "lucide-react";
+import React from "react";
 
 const Header = ({ profile, setMenuOpen, handleLogout }) => {
   return (
