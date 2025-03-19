@@ -198,7 +198,6 @@ const Profile = () => {
         if (response?.ok) {
           //   window.location.href = result?.redirectUrl;
           navigate("/invoice-emails");
-          window.location.reload(); // Reloads the page after navigation
 
           // Handle success (e.g., redirect or show success message)
         } else {

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Header = ({ setMenuOpen }) => {
   const [profile, setProfile] = useState({});
   const [emails, setEmails] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ const Header = ({ setMenuOpen }) => {
     }
 
     const fetchEmails = async () => {
+      setLoading(true);
       try {
         let response;
         let normalizedEmails = [];
@@ -135,7 +136,7 @@ const Header = ({ setMenuOpen }) => {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <div className="flex justify-end items-center gap-2 p-2 rounded-xl cursor-pointer">
+        {/* <div className="flex justify-end items-center gap-2 p-2 rounded-xl cursor-pointer">
           {profile?.profilePicture && (
             <img
               className="w-10 h-10 rounded-full border"
@@ -151,6 +152,37 @@ const Header = ({ setMenuOpen }) => {
               {profile?.email || "No Email"}
             </p>
           </div>
+        </div> */}
+        <div className="flex justify-end items-center gap-2 p-2 rounded-xl cursor-pointer">
+          {loading ? (
+            // Skeleton Loader
+            <>
+              <div className="w-10 h-10 rounded-full bg-gray-700 animate-pulse"></div>
+              <div>
+                <div className="w-24 h-5 bg-gray-700 animate-pulse rounded-md"></div>
+                <div className="w-32 h-4 bg-gray-600 animate-pulse rounded-md mt-1"></div>
+              </div>
+            </>
+          ) : (
+            // Actual Profile
+            <>
+              {profile?.profilePicture && (
+                <img
+                  className="w-10 h-10 rounded-full border"
+                  src={profile?.profilePicture}
+                  alt="Profile"
+                />
+              )}
+              <div>
+                <h1 className="font-bold text-gray-200">
+                  {profile?.name || "User"}
+                </h1>
+                <p className="text-sm text-gray-400">
+                  {profile?.email || "No Email"}
+                </p>
+              </div>
+            </>
+          )}
         </div>
         <button
           onClick={handleLogout}

@@ -9,7 +9,7 @@ import { LogOut, Menu, Receipt, Search } from "lucide-react";
 const InvoiceEmails = () => {
   const [emails, setEmails] = useState([]);
   const [profile, setProfile] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeEmailIndex, setActiveEmailIndex] = useState(null); // Track expanded email
   const [activeTab, setActiveTab] = useState("inbox");
@@ -49,6 +49,7 @@ const InvoiceEmails = () => {
     }
 
     const fetchEmails = async () => {
+      setLoading(true);
       try {
         let response;
         let normalizedEmails = [];
@@ -163,6 +164,13 @@ const InvoiceEmails = () => {
             </button>
           </div>
         </div>
+      </div>
+    );
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen w-full bg-zinc-950">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
       </div>
     );
 
