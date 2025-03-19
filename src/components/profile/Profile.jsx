@@ -224,24 +224,32 @@ const Profile = () => {
           }
 
           // Step 2: Add Card Details using userId
-          const cardPayload = {
-            userId: userId, // Send the userId separately
-            cards: formData?.cards.map((card) => ({
-              cardHolder: card.cardName,
-              cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
-              expiryDate: card.expiryDate,
-              cvc: card.cvc,
-            })),
-          };
+          // const cardPayload = {
+          //   userId: userId, // Send the userId separately
+          //   cards: formData?.cards.map((card) => ({
+          //     cardHolder: card.cardName,
+          //     cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
+          //     expiryDate: card.expiryDate,
+          //     cvc: card.cvc,
+          //   })),
+          // };
+
+          const cardPayload = formData?.cards.map((card) => ({
+            cardHolder: card.cardName,
+            cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
+            expiryDate: card.expiryDate,
+            cvc: card.cvc,
+          }));
 
           console.log("Card Payload:", cardPayload);
 
           const cardResponse = await fetch(
-            "https://onebill-poc-backend-production.up.railway.app/api/card/add",
+            `https://onebill-poc-backend-production.up.railway.app/api/card/${userId}`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                Accept: "application/json", // Ensure API accepts JSON
               },
               body: JSON.stringify(cardPayload),
             }
