@@ -223,7 +223,7 @@ const Profile = () => {
 
           // Step 2: Add Card Details using userId
           const cardPayload = {
-            userId: userId, // Send the userId separately
+            userId: 43, // Send the userId separately
             cards: formData?.cards.map((card) => ({
               cardHolder: card.cardHolder,
               cardNumber: card.cardNumber,
