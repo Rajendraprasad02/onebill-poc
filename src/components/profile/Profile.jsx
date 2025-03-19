@@ -196,7 +196,8 @@ const Profile = () => {
         const result = await response.json();
 
         if (response?.ok) {
-          window.location.href = result?.redirectUrl;
+          //   window.location.href = result?.redirectUrl;
+          navigate("/invoice-emails");
 
           // Handle success (e.g., redirect or show success message)
         } else {
