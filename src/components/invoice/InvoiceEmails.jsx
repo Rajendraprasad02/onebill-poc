@@ -175,7 +175,7 @@ const InvoiceEmails = () => {
     );
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
+    <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
       <div className="flex flex-1">
         <main className="flex-1 overflow-auto p-4">
           {/* <h1 className="text-xl font-bold capitalize">{activeTab}</h1> */}
