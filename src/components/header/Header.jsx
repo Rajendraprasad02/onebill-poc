@@ -35,6 +35,7 @@ const Header = ({ setMenuOpen }) => {
           console.log("profile", userProfile);
 
           setProfile(userProfile);
+          console.log("profileuserProfile", profile);
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
