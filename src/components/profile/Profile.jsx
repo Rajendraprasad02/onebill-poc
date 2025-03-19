@@ -195,10 +195,9 @@ const Profile = () => {
 
         const result = await response.json();
 
-        console.log("response", response);
-
         if (response?.ok) {
-          navigate(result?.redirectUrl);
+          window.location.href = result?.redirectUrl;
+
           // Handle success (e.g., redirect or show success message)
         } else {
           console.error("Error:", result);
