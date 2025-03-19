@@ -2,6 +2,11 @@ import { LogOut, Menu, Receipt } from "lucide-react";
 import React, { useEffect } from "react";
 
 const Header = ({ setMenuOpen }) => {
+  const [profile, setProfile] = useState({});
+  const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const token = localStorage.getItem("authToken");
   const provider = localStorage.getItem("authProvider");
 
