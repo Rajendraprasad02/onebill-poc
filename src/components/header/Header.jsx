@@ -1,5 +1,5 @@
 import { LogOut, Menu, Receipt } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const Header = ({ setMenuOpen }) => {
   const [profile, setProfile] = useState({});
