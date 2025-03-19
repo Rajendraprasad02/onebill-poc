@@ -228,7 +228,7 @@ const Profile = () => {
             userId: userId, // Send the userId separately
             cards: formData?.cards.map((card) => ({
               cardHolder: card.cardName,
-              cardNumber: card.cardNumber,
+              cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
               expiryDate: card.expiryDate,
               cvc: card.cvc,
             })),
