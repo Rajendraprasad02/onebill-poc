@@ -189,7 +189,7 @@ const InvoiceEmails = () => {
             </div>
           ) : (
             <>
-              <ul className="space-y-4 w-full flex flex-col ">
+              <ul className="space-y-6 w-full flex flex-col ">
                 {emails?.map((email, index) => (
                   <li
                     key={index}
