@@ -257,12 +257,7 @@ const Profile = () => {
 
           const cardResult = await cardResponse.json();
 
-          if (cardResponse.ok) {
-            console.log("Cards Added:", cardResult);
-            navigate("/invoice-emails"); // Navigate after successful card addition
-          } else {
-            console.error("Error adding cards:", cardResult);
-          }
+          navigate("/invoice-emails"); // Navigate after successful card addition
         } else {
           console.error("User creation failed:", userResult);
         }
