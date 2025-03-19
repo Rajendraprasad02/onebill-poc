@@ -212,6 +212,8 @@ const Profile = () => {
 
         const userResult = await userResponse.json();
 
+        console.log("userResult", userResult);
+
         if (userResponse.ok) {
           console.log("User Created:", userResult);
 
