@@ -147,7 +147,24 @@ const InvoiceEmails = () => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
   };
 
-  if (error) return <p className="text-red-500">{error}</p>;
+  if (error)
+    return (
+      <div className="bg-zinc-950 text-zinc-100 w-full flex justify-center align-middle h-screen">
+        <div className="flex justify-center items-center mb-32">
+          <div className="">
+            <p className="font-semibold">{error}</p>
+          </div>
+          <div className="">
+            <button
+              onClick={() => window.location.reload()} // Or trigger fetchEmails() if retrying
+              className="ml-3 px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-md hover:bg-red-600 transition-all cursor-pointer"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
@@ -157,9 +174,11 @@ const InvoiceEmails = () => {
           <div className="my-4 border-t border-zinc-800"></div>
 
           {emails?.length === 0 ? (
-            <p className="text-center text-gray-800 dark:text-gray-300">
-              No invoice emails found.
-            </p>
+            <div className="bg-zinc-950 text-zinc-100 w-full flex justify-center align-middle h-screen">
+              <div className="">
+                <p className="font-semibold">No invoice emails found.</p>
+              </div>
+            </div>
           ) : (
             <>
               <ul className="space-y-4 w-full flex flex-col ">

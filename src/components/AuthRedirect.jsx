@@ -9,11 +9,18 @@ const AuthRedirect = () => {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
     const provider = queryParams.get("provider");
+    const isNewUser = queryParams.get("isNewUser") === "true"; // Convert to boolean
 
     if (token) {
       localStorage.setItem("authToken", token);
       localStorage.setItem("authProvider", provider);
-      navigate("/invoice-emails"); // Redirect to dashboard after storing token
+
+      // Redirect based on whether the user is new
+      if (isNewUser) {
+        navigate("/profile"); // Redirect to profile setup
+      } else {
+        navigate("/invoice-emails"); // Redirect to dashboard
+      }
     } else {
       console.error("No token found.");
       navigate("/"); // Redirect to login if token is missing
