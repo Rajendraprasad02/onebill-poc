@@ -244,7 +244,7 @@ const Profile = () => {
           console.log("Card Payload:", cardPayload);
 
           const cardResponse = await fetch(
-            `https://onebill-poc-backend-production.up.railway.app/api/card/${userId}`,
+            `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
             {
               method: "POST",
               headers: {
