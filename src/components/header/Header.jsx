@@ -1,5 +1,5 @@
 import { LogOut, Menu, Receipt } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Header = ({ setMenuOpen }) => {
   const token = localStorage.getItem("authToken");
