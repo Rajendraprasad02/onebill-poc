@@ -116,6 +116,12 @@ const Header = ({ setMenuOpen }) => {
     fetchEmails();
   }, [token, provider]);
 
+  useEffect(() => {
+    if (profile && Object.keys(profile).length > 0) {
+      console.log("Profile updated:", profile);
+    }
+  }, [profile]); // Runs only when `profile` has data
+
   const handleLogout = () => {
     navigate("/");
   };
