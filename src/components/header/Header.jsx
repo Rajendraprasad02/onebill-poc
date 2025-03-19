@@ -1,7 +1,10 @@
 import { LogOut, Menu, Receipt } from "lucide-react";
 import React from "react";
 
-const Header = ({ profile, setMenuOpen, handleLogout }) => {
+const Header = ({ profile, setMenuOpen }) => {
+  const handleLogout = () => {
+    navigate("/");
+  };
   return (
     <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
       <div className="flex items-center gap-4">

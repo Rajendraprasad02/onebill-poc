@@ -18,6 +18,12 @@ const InvoiceEmails = () => {
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("authToken");
+  const provider = localStorage.getItem("authProvider");
+
+  console.log("token", token);
+  console.log("provider", provider);
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -35,8 +41,8 @@ const InvoiceEmails = () => {
   // Extract token from URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get("token");
-  const provider = queryParams.get("provider");
+  // const token = queryParams.get("token");
+  // const provider = queryParams.get("provider");
 
   useEffect(() => {
     if (!token) {
@@ -52,8 +58,8 @@ const InvoiceEmails = () => {
 
         if (provider === "google") {
           response = await axios.get(
-            `http://localhost:3000/api/emails?token=${token}`
-            // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+            // `http://localhost:3000/api/emails?token=${token}`
+            `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
           console.log("response", response);
 
@@ -146,51 +152,11 @@ const InvoiceEmails = () => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
   };
 
-  const handleLogout = () => {
-    navigate("/");
-  };
-
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
       <div className="flex flex-1">
-        {menuOpen && (
-          <aside className="w-[240px] bg-zinc-900 p-4 border-r border-zinc-800 md:hidden">
-            <nav className="flex flex-col gap-2">
-              {["inbox"].map((tab) => (
-                <button
-                  key={tab}
-                  className={`p-2 text-left ${
-                    activeTab === tab
-                      ? "bg-emerald-600 text-white"
-                      : "text-zinc-400"
-                  }`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </nav>
-          </aside>
-        )}
-        <aside className="hidden md:block w-[240px] border-r border-zinc-800 p-4">
-          <nav className="flex flex-col gap-2">
-            {["inbox"].map((tab) => (
-              <button
-                key={tab}
-                className={`p-2 text-left ${
-                  activeTab === tab
-                    ? "bg-emerald-600 text-white"
-                    : "text-zinc-400"
-                }`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
-          </nav>
-        </aside>
         <main className="flex-1 overflow-auto p-4">
           {/* <h1 className="text-xl font-bold capitalize">{activeTab}</h1> */}
           <div className="my-4 border-t border-zinc-800"></div>
