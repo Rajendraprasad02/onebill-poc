@@ -255,7 +255,10 @@ const Profile = () => {
             }
           );
 
+          console.log("cardResponse", cardResponse);
+
           const cardResult = await cardResponse.json();
+          console.log("cardResult", cardResult);
 
           navigate("/invoice-emails"); // Navigate after successful card addition
         } else {
