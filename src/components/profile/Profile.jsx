@@ -11,8 +11,11 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("authToken");
 
   const [formData, setFormData] = useState({
@@ -192,8 +195,10 @@ const Profile = () => {
 
         const result = await response.json();
 
-        if (response.ok) {
-          console.log("Success:", result);
+        console.log("response", response);
+
+        if (response?.ok) {
+          navigate(result?.redirectUrl);
           // Handle success (e.g., redirect or show success message)
         } else {
           console.error("Error:", result);
