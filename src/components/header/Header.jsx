@@ -1,3 +1,4 @@
+import axios from "axios";
 import { LogOut, Menu, Receipt } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +30,10 @@ const Header = ({ setMenuOpen }) => {
             // `http://localhost:3000/api/emails?token=${token}`
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
+          console.log("userProfile", userProfile);
 
           const userProfile = response?.data?.userInfo;
+          console.log("userProfile", userProfile);
 
           setProfile(userProfile);
 
@@ -113,12 +116,6 @@ const Header = ({ setMenuOpen }) => {
 
     fetchEmails();
   }, [token, provider]);
-
-  useEffect(() => {
-    if (profile && Object.keys(profile).length > 0) {
-      console.log("Profile updated:", profile);
-    }
-  }, [profile]); // Runs only when `profile` has data
 
   const handleLogout = () => {
     navigate("/");
