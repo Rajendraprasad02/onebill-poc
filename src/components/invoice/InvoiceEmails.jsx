@@ -52,7 +52,8 @@ const InvoiceEmails = () => {
 
         if (provider === "google") {
           response = await axios.get(
-            `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+            `http://localhost:3000/api/emails?token=${token}`
+            // `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
           console.log("response", response);
 
@@ -153,49 +154,6 @@ const InvoiceEmails = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
-      {/* <header className="flex h-16 items-center justify-between border-b border-zinc-800 px-4 md:px-6">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-          <div className="flex items-center gap-2">
-            <Receipt className="h-6 w-6 text-emerald-500" />
-            <span className="font-bold text-lg">One Bill</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <div
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex justify-end items-center gap-2  w-fit p-2 rounded-xl cursor-pointer transition-all"
-          >
-            {profile?.profilePicture && (
-              <img
-                className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-700"
-                src={profile?.profilePicture}
-                alt="Profile"
-              />
-            )}
-            <div>
-              <h1 className="font-bold text-gray-800 dark:text-gray-200">
-                {profile?.name || "User"}
-              </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                {profile?.email || "No Email"}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="p-2 text-zinc-400 hover:text-zinc-100 cursor-pointer"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
-        </div>
-      </header> */}
-
       <div className="flex flex-1">
         {menuOpen && (
           <aside className="w-[240px] bg-zinc-900 p-4 border-r border-zinc-800 md:hidden">
@@ -234,7 +192,7 @@ const InvoiceEmails = () => {
           </nav>
         </aside>
         <main className="flex-1 overflow-auto p-4">
-          <h1 className="text-xl font-bold capitalize">{activeTab}</h1>
+          {/* <h1 className="text-xl font-bold capitalize">{activeTab}</h1> */}
           <div className="my-4 border-t border-zinc-800"></div>
 
           {emails?.length === 0 ? (
