@@ -29,13 +29,10 @@ const Header = ({ setMenuOpen }) => {
             // `http://localhost:3000/api/emails?token=${token}`
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
-          console.log("response", response);
 
           const userProfile = response?.data?.userInfo;
-          console.log("profile", userProfile);
 
           setProfile(userProfile);
-          console.log("profileuserProfile", profile);
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({

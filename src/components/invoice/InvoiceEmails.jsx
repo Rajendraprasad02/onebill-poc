@@ -21,9 +21,6 @@ const InvoiceEmails = () => {
   const token = localStorage.getItem("authToken");
   const provider = localStorage.getItem("authProvider");
 
-  console.log("token", token);
-  console.log("provider", provider);
-
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -61,10 +58,8 @@ const InvoiceEmails = () => {
             // `http://localhost:3000/api/emails?token=${token}`
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
-          console.log("response", response);
 
           const userProfile = response?.data?.userInfo;
-          console.log("profile", userProfile);
 
           setProfile(userProfile);
 
