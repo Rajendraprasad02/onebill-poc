@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SideNavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("inbox");
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("");
 
   const menuItems = [
     { name: "Inbox", route: "/invoice-emails" },
@@ -12,6 +13,14 @@ const SideNavBar = () => {
     { name: "Card Details", route: "/card-details" },
     { name: "Profile", route: "/profile" },
   ];
+
+  // Update active tab based on current route
+  useEffect(() => {
+    const currentTab = menuItems.find(
+      (item) => item.route === location.pathname
+    );
+    setActiveTab(currentTab ? currentTab.name : "");
+  }, [location.pathname]);
 
   const handleNavigation = (tab, route) => {
     setActiveTab(tab);

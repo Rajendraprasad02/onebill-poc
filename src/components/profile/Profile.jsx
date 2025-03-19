@@ -10,6 +10,7 @@ import {
   LockKeyhole,
   Eye,
   EyeOff,
+  Shield,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +29,10 @@ const Profile = () => {
     cards: [
       {
         id: 1,
+        cardName: "",
         cardNumber: "",
         expiryDate: "",
+        cvc: "",
         isDefault: true,
       },
     ],
@@ -93,8 +96,10 @@ const Profile = () => {
         ...prev.cards,
         {
           id: newId,
+          cardName: "",
           cardNumber: "",
           expiryDate: "",
+          cvc: "",
           isDefault: false,
         },
       ],
@@ -149,6 +154,10 @@ const Profile = () => {
 
     // Validate cards
     formData.cards.forEach((card) => {
+      if (!card.cardName.trim()) {
+        newErrors[`card-${card.id}-cardName`] = "Cardholder name is required";
+      }
+
       if (!card.cardNumber.trim()) {
         newErrors[`card-${card.id}-cardNumber`] = "Card number is required";
       } else if (!/^\d{16}$/.test(card.cardNumber.replace(/\s/g, ""))) {
@@ -160,6 +169,12 @@ const Profile = () => {
         newErrors[`card-${card.id}-expiryDate`] = "Expiry date is required";
       } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(card.expiryDate)) {
         newErrors[`card-${card.id}-expiryDate`] = "Use format MM/YY";
+      }
+
+      if (!card.cvc.trim()) {
+        newErrors[`card-${card.id}-cvc`] = "CVC is required";
+      } else if (!/^\d{3,4}$/.test(card.cvc)) {
+        newErrors[`card-${card.id}-cvc`] = "CVC must be 3-4 digits";
       }
     });
 
@@ -173,36 +188,68 @@ const Profile = () => {
     if (validateForm()) {
       setIsSubmitting(true);
 
-      const formDt = {
-        // username: formData?.firstName + formData?.lastName,
+      const userPayload = {
+        username: formData?.firstName + formData?.lastName,
         password: formData?.password,
         email: formData?.email,
-        // card: formData?.cards,
       };
 
+      console.log("User Payload:", userPayload);
+
       try {
-        const response = await fetch(
+        // Step 1: Create User
+        const userResponse = await fetch(
           "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Send the Google token
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(formDt), // Use formDt instead of undefined variables
+            body: JSON.stringify(userPayload),
           }
         );
 
-        const result = await response.json();
+        const userResult = await userResponse.json();
 
-        if (response?.ok) {
-          //   window.location.href = result?.redirectUrl;
-          navigate("/invoice-emails");
+        if (userResponse.ok) {
+          console.log("User Created:", userResult);
 
-          // Handle success (e.g., redirect or show success message)
+          const userId = userResult?.user?.id; // Ensure userId is returned
+
+          if (!userId) {
+            throw new Error("User ID is missing from response");
+          }
+
+          // Step 2: Add Card Details using userId
+          const cardPayload = {
+            userId: userId, // Associate the cards with the user
+            cards: formData?.cards, // Sending multiple card details as an array
+          };
+
+          console.log("Card Payload:", cardPayload);
+
+          const cardResponse = await fetch(
+            "https://onebill-poc-backend-production.up.railway.app/api/card/add",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(cardPayload),
+            }
+          );
+
+          const cardResult = await cardResponse.json();
+
+          if (cardResponse.ok) {
+            console.log("Cards Added:", cardResult);
+            navigate("/invoice-emails"); // Navigate after successful card addition
+          } else {
+            console.error("Error adding cards:", cardResult);
+          }
         } else {
-          console.error("Error:", result);
-          // Handle error (e.g., display error message)
+          console.error("User creation failed:", userResult);
         }
       } catch (error) {
         console.error("Network error:", error);
@@ -253,14 +300,20 @@ const Profile = () => {
     return value;
   };
 
+  const formatCVC = (value, id) => {
+    const v = value.replace(/[^0-9]/gi, "");
+    handleCardChange(id, "cvc", v);
+    return v;
+  };
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-900 text-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         <h1 className="text-3xl font-bold mb-8 text-center">User Details</h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* User Details Section */}
-          <div className="bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg">
+          <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
             <div className="p-6">
               <h2 className="text-xl font-semibold mb-6">
                 Personal Information
@@ -270,18 +323,18 @@ const Profile = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="firstName"
-                    className="block text-sm font-medium text-zinc-300"
+                    className="block text-sm font-medium text-gray-300"
                   >
                     First Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <input
                       id="firstName"
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleUserChange}
-                      className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 pl-10 pr-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="John"
                     />
                   </div>
@@ -295,18 +348,18 @@ const Profile = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="lastName"
-                    className="block text-sm font-medium text-zinc-300"
+                    className="block text-sm font-medium text-gray-300"
                   >
                     Last Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <input
                       id="lastName"
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleUserChange}
-                      className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 pl-10 pr-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="Doe"
                     />
                   </div>
@@ -320,19 +373,19 @@ const Profile = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-zinc-300"
+                    className="block text-sm font-medium text-gray-300"
                   >
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <input
                       id="email"
                       name="email"
                       type="email"
                       value={formData.email}
                       onChange={handleUserChange}
-                      className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 pl-10 pr-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="john.doe@example.com"
                     />
                   </div>
@@ -344,18 +397,18 @@ const Profile = () => {
                 <div className="space-y-2">
                   <label
                     htmlFor="phone"
-                    className="block text-sm font-medium text-zinc-300"
+                    className="block text-sm font-medium text-gray-300"
                   >
                     Phone
                   </label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                    <Phone className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                     <input
                       id="phone"
                       name="phone"
                       value={formData.phone}
                       onChange={handleUserChange}
-                      className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 pl-10 pr-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="(123) 456-7890"
                     />
                   </div>
@@ -448,7 +501,7 @@ const Profile = () => {
               <button
                 type="button"
                 onClick={addCard}
-                className="cursor-pointer flex items-center px-4 py-2 bg-transparent border border-zinc-600 rounded-md text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex items-center px-4 py-2 bg-transparent border border-gray-600 rounded-md text-gray-300 hover:bg-gray-700 hover:text-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Card
@@ -456,22 +509,22 @@ const Profile = () => {
             </div>
 
             <div className="space-y-4">
-              {formData?.cards?.map((card, index) => (
+              {formData.cards.map((card, index) => (
                 <div
                   key={card.id}
-                  className="bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
+                  className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
                 >
                   <div className="p-6">
                     <div className="flex justify-between items-center mb-4">
                       <h3 className="font-medium flex items-center">
-                        <CreditCard className="mr-2 h-5 w-5 text-zinc-400" />
+                        <CreditCard className="mr-2 h-5 w-5 text-gray-400" />
                         Card {index + 1}
                       </h3>
                       {formData.cards.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeCard(card.id)}
-                          className="text-zinc-400 hover:text-red-400 p-1 rounded-full hover:bg-zinc-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                          className="text-gray-400 hover:text-red-400 p-1 rounded-full hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                         >
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Remove card</span>
@@ -479,11 +532,40 @@ const Profile = () => {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
+                      {/* Card Name */}
+                      <div className="space-y-2">
+                        <label
+                          htmlFor={`card-${card.id}-name`}
+                          className="block text-sm font-medium text-gray-300"
+                        >
+                          Cardholder Name
+                        </label>
+                        <input
+                          id={`card-${card.id}-name`}
+                          value={card.cardName}
+                          onChange={(e) =>
+                            handleCardChange(
+                              card.id,
+                              "cardName",
+                              e.target.value
+                            )
+                          }
+                          className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          placeholder="John Doe"
+                        />
+                        {errors[`card-${card.id}-cardName`] && (
+                          <p className="text-red-400 text-sm mt-1">
+                            {errors[`card-${card.id}-cardName`]}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Card Number */}
                       <div className="space-y-2">
                         <label
                           htmlFor={`card-${card.id}-number`}
-                          className="block text-sm font-medium text-zinc-300"
+                          className="block text-sm font-medium text-gray-300"
                         >
                           Card Number
                         </label>
@@ -493,7 +575,7 @@ const Profile = () => {
                           onChange={(e) =>
                             formatCardNumber(e.target.value, card.id)
                           }
-                          className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 px-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                          className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                           placeholder="1234 5678 9012 3456"
                           maxLength={19}
                         />
@@ -504,43 +586,74 @@ const Profile = () => {
                         )}
                       </div>
 
-                      <div className="space-y-2">
-                        <label
-                          htmlFor={`card-${card.id}-expiry`}
-                          className="block text-sm font-medium text-zinc-300"
-                        >
-                          Expiry Date
-                        </label>
-                        <input
-                          id={`card-${card.id}-expiry`}
-                          value={card.expiryDate}
-                          onChange={(e) =>
-                            formatExpiryDate(e.target.value, card.id)
-                          }
-                          className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 px-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                          placeholder="MM/YY"
-                          maxLength={5}
-                        />
-                        {errors[`card-${card.id}-expiryDate`] && (
-                          <p className="text-red-400 text-sm mt-1">
-                            {errors[`card-${card.id}-expiryDate`]}
-                          </p>
-                        )}
+                      {/* Expiry Date and CVC in a row */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label
+                            htmlFor={`card-${card.id}-expiry`}
+                            className="block text-sm font-medium text-gray-300"
+                          >
+                            Expiry Date
+                          </label>
+                          <input
+                            id={`card-${card.id}-expiry`}
+                            value={card.expiryDate}
+                            onChange={(e) =>
+                              formatExpiryDate(e.target.value, card.id)
+                            }
+                            className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            placeholder="MM/YY"
+                            maxLength={5}
+                          />
+                          {errors[`card-${card.id}-expiryDate`] && (
+                            <p className="text-red-400 text-sm mt-1">
+                              {errors[`card-${card.id}-expiryDate`]}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <label
+                            htmlFor={`card-${card.id}-cvc`}
+                            className="block text-sm font-medium text-gray-300"
+                          >
+                            CVC/CVV
+                          </label>
+                          <div className="relative">
+                            <input
+                              id={`card-${card.id}-cvc`}
+                              value={card.cvc}
+                              onChange={(e) =>
+                                formatCVC(e.target.value, card.id)
+                              }
+                              className="w-full bg-gray-700 border border-gray-600 rounded-md py-2 pl-3 pr-10 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                              placeholder="123"
+                              maxLength={4}
+                              type="password"
+                            />
+                            <Shield className="absolute right-3 top-2.5 h-4 w-4 text-gray-500" />
+                          </div>
+                          {errors[`card-${card.id}-cvc`] && (
+                            <p className="text-red-400 text-sm mt-1">
+                              {errors[`card-${card.id}-cvc`]}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    <div className="mt-4 flex items-center">
+                    <div className="mt-6 flex items-center">
                       <div className="flex items-center">
                         <input
                           id={`card-${card.id}-default`}
                           type="radio"
                           checked={card.isDefault}
                           onChange={() => handleDefaultChange(card.id)}
-                          className="h-4 w-4 text-blue-500 border-zinc-500 focus:ring-blue-500 focus:ring-offset-zinc-800"
+                          className="h-4 w-4 text-blue-500 border-gray-500 focus:ring-blue-500 focus:ring-offset-gray-800"
                         />
                         <label
                           htmlFor={`card-${card.id}-default`}
-                          className="ml-2 text-sm text-zinc-300 cursor-pointer"
+                          className="ml-2 text-sm text-gray-300 cursor-pointer"
                         >
                           Set as Default
                         </label>
@@ -552,15 +665,13 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="w-1/2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Submitting..." : "Save Information"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Save Information"}
+          </button>
         </form>
       </div>
     </div>
