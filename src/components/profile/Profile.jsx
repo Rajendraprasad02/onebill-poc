@@ -227,23 +227,22 @@ const Profile = () => {
 
           console.log("Card Payload:", cardPayload);
 
-          // const cardResponse = await fetch(
-          //   `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
-          //   {
-          //     method: "POST",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //       Accept: "application/json", // Ensure API accepts JSON
-          //     },
-          //     body: JSON.stringify(cardPayload),
-          //   }
-          // );
-
-          const response = await axios.post(
-            `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
-            cardPayload,
-            { headers: { "Content-Type": "application/json" } }
+          const cardResponse = await fetch(
+            `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${userId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(cardPayload),
+            }
           );
+
+          // const response = await axios.post(
+          //   `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
+          //   cardPayload,
+          //   { headers: { "Content-Type": "application/json" } }
+          // );
 
           console.log("cardResponse", response);
 
