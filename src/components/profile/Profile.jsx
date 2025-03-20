@@ -18,6 +18,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("authToken");
+  const provider = localStorage.getItem("authProvider");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -199,6 +200,7 @@ const Profile = () => {
           cvc: card.cvc,
           isDefault: card?.isDefault,
         })),
+        provider: provider,
       };
 
       try {
