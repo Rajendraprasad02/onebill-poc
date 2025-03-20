@@ -98,7 +98,7 @@ const CardDetails = () => {
       }
     );
 
-    console.log("responseresponse", response);
+    console.log("responseresponseresponseresponse", response);
   };
 
   return (
