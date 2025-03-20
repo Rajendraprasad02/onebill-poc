@@ -13,6 +13,7 @@ import {
   Shield,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -243,21 +244,26 @@ const Profile = () => {
 
           console.log("Card Payload:", cardPayload);
 
-          const cardResponse = await fetch(
-            `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json", // Ensure API accepts JSON
-              },
-              body: JSON.stringify(cardPayload),
-            }
+          // const cardResponse = await fetch(
+          //   `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //       Accept: "application/json", // Ensure API accepts JSON
+          //     },
+          //     body: JSON.stringify(cardPayload),
+          //   }
+          // );
+
+          const response = await axios.post(
+            `http://localhost:3000/cards/${userId}`,
+            cardPayload
           );
 
-          console.log("cardResponse", cardResponse);
+          console.log("cardResponse", response);
 
-          const cardResult = await cardResponse.json();
+          const cardResult = await response.json();
           console.log("cardResult", cardResult);
 
           navigate("/invoice-emails"); // Navigate after successful card addition
