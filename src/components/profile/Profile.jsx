@@ -214,9 +214,9 @@ const Profile = () => {
         if (userResponse.ok) {
           const userId = userResult?.user?.id; // Ensure userId is returned
 
-          if (!userId) {
-            throw new Error("User ID is missing from response");
-          }
+          // if (!userId) {
+          //   throw new Error("User ID is missing from response");
+          // }
 
           const cardPayload = formData?.cards.map((card) => ({
             cardHolder: card.cardName,
@@ -240,7 +240,7 @@ const Profile = () => {
           // );
 
           const response = await axios.post(
-            `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
+            `https://onebill-poc-backend-production.up.railway.app/api/cards/${58}`,
             cardPayload,
             { headers: { "Content-Type": "application/json" } }
           );
