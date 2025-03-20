@@ -257,7 +257,7 @@ const Profile = () => {
           // );
 
           const response = await axios.post(
-            `http://localhost:3000/cards/${userId}`,
+            `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
             cardPayload
           );
 
