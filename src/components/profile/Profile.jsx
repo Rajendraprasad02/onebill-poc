@@ -197,59 +197,56 @@ const Profile = () => {
 
       try {
         // Step 1: Create User
-        const userResponse = await fetch(
-          "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
+        // const userResponse = await fetch(
+        //   "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //       Authorization: `Bearer ${token}`,
+        //     },
+        //     body: JSON.stringify(userPayload),
+        //   }
+        // );
+
+        // const userResult = await userResponse.json();
+
+        // if (userResponse.ok) {
+        //   const userId = userResult?.user?.id; // Ensure userId is returned
+
+        // if (!userId) {
+        //   throw new Error("User ID is missing from response");
+        // }
+
+        const cardPayload = formData?.cards.map((card) => ({
+          cardHolder: card.cardName,
+          cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
+          expiryDate: card.expiryDate,
+          cvc: card.cvc,
+        }));
+
+        console.log("Card Payload:", cardPayload);
+
+        const cardResponse = await fetch(
+          `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${70}`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(userPayload),
+            body: JSON.stringify(cardPayload),
           }
         );
 
-        const userResult = await userResponse.json();
+        // const response = await axios.post(
+        //   `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
+        //   cardPayload,
+        //   { headers: { "Content-Type": "application/json" } }
+        // );
 
-        if (userResponse.ok) {
-          const userId = userResult?.user?.id; // Ensure userId is returned
+        console.log("cardResponse", response);
 
-          // if (!userId) {
-          //   throw new Error("User ID is missing from response");
-          // }
-
-          const cardPayload = formData?.cards.map((card) => ({
-            cardHolder: card.cardName,
-            cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
-            expiryDate: card.expiryDate,
-            cvc: card.cvc,
-          }));
-
-          console.log("Card Payload:", cardPayload);
-
-          const cardResponse = await fetch(
-            `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${userId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(cardPayload),
-            }
-          );
-
-          // const response = await axios.post(
-          //   `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
-          //   cardPayload,
-          //   { headers: { "Content-Type": "application/json" } }
-          // );
-
-          console.log("cardResponse", response);
-
-          navigate("/invoice-emails"); // Navigate after successful card addition
-        } else {
-          console.error("User creation failed:", userResult);
-        }
+        navigate("/invoice-emails"); // Navigate after successful card addition
       } catch (error) {
         console.error("Network error:", error);
       } finally {
