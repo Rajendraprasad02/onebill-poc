@@ -195,8 +195,6 @@ const Profile = () => {
         email: formData?.email,
       };
 
-      console.log("User Payload:", userPayload);
-
       try {
         // Step 1: Create User
         const userResponse = await fetch(
@@ -213,27 +211,12 @@ const Profile = () => {
 
         const userResult = await userResponse.json();
 
-        console.log("userResult", userResult);
-
         if (userResponse.ok) {
-          console.log("User Created:", userResult);
-
           const userId = userResult?.user?.id; // Ensure userId is returned
 
           if (!userId) {
             throw new Error("User ID is missing from response");
           }
-
-          // Step 2: Add Card Details using userId
-          // const cardPayload = {
-          //   userId: userId, // Send the userId separately
-          //   cards: formData?.cards.map((card) => ({
-          //     cardHolder: card.cardName,
-          //     cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
-          //     expiryDate: card.expiryDate,
-          //     cvc: card.cvc,
-          //   })),
-          // };
 
           const cardPayload = formData?.cards.map((card) => ({
             cardHolder: card.cardName,
@@ -262,9 +245,6 @@ const Profile = () => {
           );
 
           console.log("cardResponse", response);
-
-          const cardResult = await response.json();
-          console.log("cardResult", cardResult);
 
           navigate("/invoice-emails"); // Navigate after successful card addition
         } else {
