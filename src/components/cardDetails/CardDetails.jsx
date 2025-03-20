@@ -79,7 +79,7 @@ const CardDetails = () => {
 
   // Sample card data
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = {
       cardHolder: cardholderName,
       cardNumber: cardNumber,
@@ -87,10 +87,19 @@ const CardDetails = () => {
       cvc: cvc,
     };
 
-    console.log(payload);
-  };
+    const response = await fetch(
+      `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
-  console.log("userid", userId);
+    console.log("responseresponse", response);
+  };
 
   return (
     <div className="space-y-6 p-6 bg-zinc-950 text-zinc-100 w-full">
