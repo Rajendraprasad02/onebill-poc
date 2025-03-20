@@ -186,7 +186,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
+    if (true) {
       setIsSubmitting(true);
 
       const userPayload = {
