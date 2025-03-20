@@ -118,7 +118,7 @@ const Header = ({ setMenuOpen }) => {
   }, [token, provider]);
 
   const handleLogout = () => {
-    navigate("/");
+    navigate("/signup");
   };
 
   return (
