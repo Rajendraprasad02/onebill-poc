@@ -240,7 +240,7 @@ const Profile = () => {
           // );
 
           const response = await axios.post(
-            `https://onebill-poc-backend-production.up.railway.app/api/cards/${58}`,
+            `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
             cardPayload,
             { headers: { "Content-Type": "application/json" } }
           );
