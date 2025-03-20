@@ -8,18 +8,21 @@ import SetPassword from "./components/login/SetPassword";
 import MainPage from "./components/pages/MainPage";
 import AuthRedirect from "./components/AuthRedirect";
 import Profile from "./components/profile/Profile";
+import CardDetails from "./components/cardDetails/CardDetails";
 
 const router = createHashRouter([
-  { path: "/", element: <Signup /> },
   { path: "/signup", element: <Signup /> },
   // { path: "/invoice-emails", element: <InvoiceEmails /> },
   { path: "/set-password", element: <SetPassword /> },
   { path: "/profile", element: <Profile /> },
   { path: "/auth-redirect", element: <AuthRedirect /> },
   {
-    path: "/invoice-emails",
+    path: "/",
     element: <MainPage />,
-    children: [{ element: <InvoiceEmails />, path: "" }, {}],
+    children: [
+      { element: <InvoiceEmails />, path: "/invoice-emails" },
+      { path: "card-details", element: <CardDetails /> },
+    ],
   },
 ]);
 

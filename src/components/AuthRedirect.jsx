@@ -10,10 +10,12 @@ const AuthRedirect = () => {
     const token = queryParams.get("token");
     const provider = queryParams.get("provider");
     const isNewUser = queryParams.get("isNewUser") === "true"; // Convert to boolean
+    const userId = queryParams.get("userId"); // Convert to boolean
 
     if (token) {
       localStorage.setItem("authToken", token);
       localStorage.setItem("authProvider", provider);
+      localStorage.setItem("userId", userId);
 
       // Redirect based on whether the user is new
       if (isNewUser) {

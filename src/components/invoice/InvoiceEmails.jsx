@@ -21,9 +21,6 @@ const InvoiceEmails = () => {
   const token = localStorage.getItem("authToken");
   const provider = localStorage.getItem("authProvider");
 
-  console.log("tokentoken", token);
-  console.log("providerprovider", provider);
-
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -85,8 +82,6 @@ const InvoiceEmails = () => {
               }
             );
 
-            console.log("response_microsoft", response);
-
             // Fetch User Profile
             const userProfileRes = await axios.get(
               "https://graph.microsoft.com/v1.0/me",
@@ -94,7 +89,6 @@ const InvoiceEmails = () => {
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
-            console.log("userProfileRes_microsoft", userProfileRes);
 
             const userProfile = userProfileRes.data;
 
