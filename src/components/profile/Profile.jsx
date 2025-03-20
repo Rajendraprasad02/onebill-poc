@@ -13,7 +13,6 @@ import {
   Shield,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -186,67 +185,47 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (true) {
+    if (validateForm()) {
       setIsSubmitting(true);
 
       const userPayload = {
         username: formData?.firstName + formData?.lastName,
         password: formData?.password,
         email: formData?.email,
-      };
-
-      try {
-        // Step 1: Create User
-        // const userResponse = await fetch(
-        //   "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       Authorization: `Bearer ${token}`,
-        //     },
-        //     body: JSON.stringify(userPayload),
-        //   }
-        // );
-
-        // const userResult = await userResponse.json();
-
-        // if (userResponse.ok) {
-        //   const userId = userResult?.user?.id; // Ensure userId is returned
-
-        // if (!userId) {
-        //   throw new Error("User ID is missing from response");
-        // }
-
-        const cardPayload = formData?.cards.map((card) => ({
+        cards: formData?.cards.map((card) => ({
           cardHolder: card.cardName,
           cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
           expiryDate: card.expiryDate,
           cvc: card.cvc,
-        }));
+        })),
+      };
 
-        console.log("Card Payload:", cardPayload);
+      console.log("Final Payload:", userPayload);
 
-        const cardResponse = await fetch(
-          `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${70}`,
+      try {
+        // Step 1: Send user and card details in one request
+        const response = await fetch(
+          "https://onebill-poc-backend-production.up.railway.app/api/google/set-password",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(cardPayload),
+            body: JSON.stringify(userPayload),
           }
         );
 
-        // const response = await axios.post(
-        //   `https://onebill-poc-backend-production.up.railway.app/api/cards?userId=${58}`,
-        //   cardPayload,
-        //   { headers: { "Content-Type": "application/json" } }
-        // );
+        const result = await response.json();
 
-        console.log("cardResponse", response);
+        console.log("API Response:", result);
 
-        navigate("/invoice-emails"); // Navigate after successful card addition
+        if (response.ok) {
+          console.log("User Created and Cards Added Successfully");
+          navigate("/invoice-emails"); // Redirect after successful user & card creation
+        } else {
+          console.error("User creation failed:", result);
+        }
       } catch (error) {
         console.error("Network error:", error);
       } finally {
