@@ -80,12 +80,14 @@ const CardDetails = () => {
   // Sample card data
 
   const handleSubmit = async () => {
-    const payload = {
-      cardHolder: cardholderName,
-      cardNumber: cardNumber.replace(/\s+/g, ""),
-      expiryDate: expiry,
-      cvc: cvc,
-    };
+    const payload = [
+      {
+        cardHolder: cardholderName,
+        cardNumber: cardNumber.replace(/\s+/g, ""),
+        expiryDate: expiry,
+        cvc: cvc,
+      },
+    ];
 
     const response = await fetch(
       `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
