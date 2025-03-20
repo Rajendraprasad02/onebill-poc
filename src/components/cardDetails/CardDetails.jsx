@@ -8,6 +8,7 @@ const CardDetails = () => {
   const [showAddCard, setShowAddCard] = useState(false);
   const [cardholderName, setCardholderName] = useState("");
   const [cards, setCards] = useState([]);
+  const [cardLoading, setCardLoading] = useState(false);
 
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -19,29 +20,28 @@ const CardDetails = () => {
 
   const userId = localStorage.getItem("userId");
 
+  const fetchUserCards = async () => {
+    try {
+      const response = await axios.get(
+        `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`
+      );
+
+      const transformedCards = response?.data?.map((card) => ({
+        id: card.id,
+        type: card.cardHolder,
+        last4: card.cardNumber.slice(-4), // Get the last 4 digits of the card number
+        expiry: card.expiryDate, // Assuming the API already returns this in MM/YY format
+        isDefault: card.isDefault || false, // Set default to false if null
+      }));
+      setCards(transformedCards);
+    } catch (err) {
+      setError("Failed to fetch cards");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchUserCards = async () => {
-      try {
-        const response = await axios.get(
-          `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`
-        );
-
-        const transformedCards = response?.data?.map((card) => ({
-          id: card.id,
-          type: card.cardHolder,
-          last4: card.cardNumber.slice(-4), // Get the last 4 digits of the card number
-          expiry: card.expiryDate, // Assuming the API already returns this in MM/YY format
-          isDefault: card.isDefault || false, // Set default to false if null
-        }));
-        setCards(transformedCards);
-      } catch (err) {
-        setError("Failed to fetch cards");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUserCards();
   }, []); // Empty dependency array to call the effect once
 
@@ -80,6 +80,9 @@ const CardDetails = () => {
   // Sample card data
 
   const handleSubmit = async () => {
+    // Set loading to true when the submission starts
+    setCardLoading(true);
+
     const payload = [
       {
         cardHolder: cardholderName,
@@ -89,18 +92,25 @@ const CardDetails = () => {
       },
     ];
 
-    const response = await fetch(
-      `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    console.log("responseresponseresponseresponse", response);
+    try {
+      const response = await fetch(
+        `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+    } catch (error) {
+      // Handle any other errors (e.g., network issues)
+      console.error("Error:", error);
+    } finally {
+      fetchUserCards();
+      setShowAddCard(false);
+      setCardLoading(false);
+    }
   };
 
   return (
@@ -193,10 +203,13 @@ const CardDetails = () => {
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer"
+                className={`px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ${
+                  cardLoading ? "cursor-not-allowed" : "cursor-pointer"
+                }`}
                 onClick={handleSubmit}
               >
-                Save Card
+                {cardLoading ? "Saving..." : "Save Card"}{" "}
+                {/* Change button text based on loading */}
               </button>
             </div>
           </div>
