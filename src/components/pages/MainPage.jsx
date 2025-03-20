@@ -11,7 +11,7 @@ const MainPage = () => {
       {/* <InvoiceEmails /> */}
       <div className="flex w-full">
         <SideNavBar />
-        <div className="flex-1 ml-64 overflow-y-auto h-full ">
+        <div className="flex-1 ml-64 overflow-y-auto h-full mt-16">
           <Outlet />
         </div>{" "}
       </div>
