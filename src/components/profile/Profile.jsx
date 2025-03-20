@@ -197,10 +197,9 @@ const Profile = () => {
           cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
           expiryDate: card.expiryDate,
           cvc: card.cvc,
+          isDefault: card?.isDefault,
         })),
       };
-
-      console.log("Final Payload:", userPayload);
 
       try {
         // Step 1: Send user and card details in one request
@@ -218,10 +217,7 @@ const Profile = () => {
 
         const result = await response.json();
 
-        console.log("API Response:", result);
-
         if (response.ok) {
-          console.log("User Created and Cards Added Successfully");
           navigate("/invoice-emails"); // Redirect after successful user & card creation
         } else {
           console.error("User creation failed:", result);
