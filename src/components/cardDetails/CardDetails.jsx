@@ -82,7 +82,7 @@ const CardDetails = () => {
   const handleSubmit = async () => {
     const payload = {
       cardHolder: cardholderName,
-      cardNumber: cardNumber,
+      cardNumber: cardNumber.replace(/\s+/g, ""),
       expiryDate: expiry,
       cvc: cvc,
     };
