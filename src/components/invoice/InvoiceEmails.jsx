@@ -42,29 +42,29 @@ const InvoiceEmails = () => {
   // const provider = queryParams.get("provider");
 
   const extractBillDetails = (message) => {
-    if (!message) return null;
+    console.log("messageee", message);
 
-    // Example Regex Patterns (Adjust Based on Your Emails)
+    if (!message || typeof message !== "string")
+      return {
+        company: "Unknown",
+        amount: "Not found",
+        paymentPurpose: "Unspecified",
+        invoiceId: "N/A",
+      };
+
+    // Example Regex Patterns
     const companyRegex =
       /(?:from|by|billed to|invoice from):?\s*([\w\s&.,-]+)/i;
-    const amountRegex = /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g; // Captures amounts like $1,234.56
+    const amountRegex = /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g;
     const paymentPurposeRegex =
       /(subscription|service|purchase|invoice|bill|payment)/i;
     const invoiceIdRegex = /(Invoice|Bill|Reference)\s*#?:?\s*([\w\d-]+)/i;
 
-    // Extract Details Using Regex
-    const companyMatch = message.match(companyRegex);
-    const amountMatch = message.match(amountRegex);
-    const paymentPurposeMatch = message.match(paymentPurposeRegex);
-    const invoiceIdMatch = message.match(invoiceIdRegex);
-
     return {
-      company: companyMatch ? companyMatch[1].trim() : "Unknown",
-      amount: amountMatch ? amountMatch[0] : "Not found",
-      paymentPurpose: paymentPurposeMatch
-        ? paymentPurposeMatch[0]
-        : "Unspecified",
-      invoiceId: invoiceIdMatch ? invoiceIdMatch[2] : "N/A",
+      company: message.match(companyRegex)?.[1]?.trim() || "Unknown",
+      amount: message.match(amountRegex)?.[0] || "Not found",
+      paymentPurpose: message.match(paymentPurposeRegex)?.[0] || "Unspecified",
+      invoiceId: message.match(invoiceIdRegex)?.[2] || "N/A",
     };
   };
 
@@ -203,6 +203,7 @@ const InvoiceEmails = () => {
 
   const dataEmail = extractBillDetails(emails);
   console.log("dataEmail", dataEmail);
+  console.log("emaillll", emails);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
