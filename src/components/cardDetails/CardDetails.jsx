@@ -238,7 +238,7 @@ const CardDetails = () => {
       )}
       {loading && <SkeletonCard />}
 
-      <div className="grid gap-4 md:grid-cols-2 w-3xl">
+      <div className="grid gap-4 md:grid-cols-2 w-full">
         {cards?.map((card) => (
           <div
             key={card.id}
@@ -257,6 +257,7 @@ const CardDetails = () => {
               )}
             </div>
             <p className="text-sm text-gray-500">Expires {card.expiry}</p>
+            <p className="text-sm text-gray-500">CVC {card.cvc}</p>
 
             <div className="flex justify-between mt-4">
               <button className="px-4 py-2 border rounded-lg cursor-pointer">
