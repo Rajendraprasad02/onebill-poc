@@ -41,6 +41,33 @@ const InvoiceEmails = () => {
   // const token = queryParams.get("token");
   // const provider = queryParams.get("provider");
 
+  const extractBillDetails = (message) => {
+    if (!message) return null;
+
+    // Example Regex Patterns (Adjust Based on Your Emails)
+    const companyRegex =
+      /(?:from|by|billed to|invoice from):?\s*([\w\s&.,-]+)/i;
+    const amountRegex = /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g; // Captures amounts like $1,234.56
+    const paymentPurposeRegex =
+      /(subscription|service|purchase|invoice|bill|payment)/i;
+    const invoiceIdRegex = /(Invoice|Bill|Reference)\s*#?:?\s*([\w\d-]+)/i;
+
+    // Extract Details Using Regex
+    const companyMatch = message.match(companyRegex);
+    const amountMatch = message.match(amountRegex);
+    const paymentPurposeMatch = message.match(paymentPurposeRegex);
+    const invoiceIdMatch = message.match(invoiceIdRegex);
+
+    return {
+      company: companyMatch ? companyMatch[1].trim() : "Unknown",
+      amount: amountMatch ? amountMatch[0] : "Not found",
+      paymentPurpose: paymentPurposeMatch
+        ? paymentPurposeMatch[0]
+        : "Unspecified",
+      invoiceId: invoiceIdMatch ? invoiceIdMatch[2] : "N/A",
+    };
+  };
+
   useEffect(() => {
     if (!token) {
       setError("No token found.");
@@ -173,6 +200,9 @@ const InvoiceEmails = () => {
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
       </div>
     );
+
+  const dataEmail = extractBillDetails(emails);
+  console.log("dataEmail", dataEmail);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
