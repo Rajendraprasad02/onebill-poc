@@ -64,6 +64,8 @@ const InvoiceEmails = () => {
 
           setProfile(userProfile);
 
+          console.log("response", response);
+
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
               id: index, // Use index as a temporary ID if the API doesn't provide one
@@ -81,6 +83,8 @@ const InvoiceEmails = () => {
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
+
+            console.log("response", response);
 
             // Fetch User Profile
             const userProfileRes = await axios.get(
