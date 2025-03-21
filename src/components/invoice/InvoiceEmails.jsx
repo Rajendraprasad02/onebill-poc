@@ -250,16 +250,12 @@ const InvoiceEmails = () => {
                           {email?.message ? (
                             <div
                               className="mt-2"
-                              // dangerouslySetInnerHTML={{
-                              //   __html: DOMPurify.sanitize(
-                              //     email?.message?.trim()
-                              //   ),
-                              // }}
-                            >
-                              <span className="text-red-600">
-                                {email?.message}
-                              </span>
-                            </div>
+                              dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(
+                                  email?.message?.trim()
+                                ),
+                              }}
+                            />
                           ) : (
                             <p className="dark:text-gray-400">
                               No message content available.
