@@ -216,15 +216,24 @@ const InvoiceEmails = () => {
 
   const details = extractInvoiceDetails(emails);
 
+  console.log("Extracted Details:", details); // Check if the function returns the expected data
+
+  if (details.length > 0) {
+    localStorage.setItem("invoiceDetails", JSON.stringify(details));
+    console.log(
+      "Stored Invoice Details:",
+      localStorage.getItem("invoiceDetails")
+    );
+  } else {
+    console.warn("No valid invoice details extracted.");
+  }
+
   localStorage.setItem("invoiceDetails", JSON.stringify(details));
 
   console.log(
     "Stored Invoice Details:",
     localStorage.getItem("invoiceDetails")
   );
-
-  console.log("detailsdetails", details);
-  console.log("detailsdetails", details);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
