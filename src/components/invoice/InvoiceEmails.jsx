@@ -38,38 +38,6 @@ const InvoiceEmails = () => {
   // Extract token from URL
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  // const token = queryParams.get("token");
-  // const provider = queryParams.get("provider");
-
-  const extractBillDetails = (message) => {
-    console.log("messageee", message);
-
-    if (!message || typeof message !== "string") {
-      return {
-        company: "Unknown",
-        amount: "Not found",
-        paymentPurpose: "Unspecified",
-        invoiceId: "N/A",
-      };
-    }
-
-    // Updated Regex Patterns
-    const companyRegex =
-      /(?:from|by|billed to|invoice from):\s*\**([\w\s&.,-]+)\**/i;
-    const amountRegex = /\**\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?\**/;
-    const paymentPurposeRegex =
-      /(subscription|service|purchase|invoice|bill|payment)/i;
-    const invoiceIdRegex =
-      /(?:Invoice|Bill|Reference|Invoice Number)\s*#?:?\s*\**([\w\d-]+)\**/i;
-
-    return {
-      company: message.match(companyRegex)?.[1]?.trim() || "Unknown",
-      amount:
-        message.match(amountRegex)?.[0]?.replace(/\*/g, "") || "Not found",
-      paymentPurpose: message.match(paymentPurposeRegex)?.[0] || "Unspecified",
-      invoiceId: message.match(invoiceIdRegex)?.[1] || "N/A",
-    };
-  };
 
   useEffect(() => {
     if (!token) {
@@ -203,14 +171,12 @@ const InvoiceEmails = () => {
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
       </div>
     );
-
-  emails.forEach((msg) => console.log(extractBillDetails(msg)));
+  console.log("emailsemails", emails);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
       <div className="flex flex-1">
         <main className="flex-1 overflow-auto p-4">
-          {/* <h1 className="text-xl font-bold capitalize">{activeTab}</h1> */}
           <div className="my-4 border-t border-zinc-800"></div>
 
           {emails?.length === 0 ? (
