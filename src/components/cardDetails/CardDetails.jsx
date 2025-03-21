@@ -113,9 +113,30 @@ const CardDetails = () => {
     }
   };
 
+  const SkeletonCard = () => (
+    <div className="grid gap-4 md:grid-cols-2 w-3xl">
+      {[...Array(2)].map((_, index) => (
+        <div
+          key={index}
+          className="p-4 border rounded-lg animate-pulse border-gray-800"
+        >
+          <div className="flex justify-between items-center">
+            <div className="h-4 w-32 bg-gray-800 rounded"></div>
+            <div className="h-4 w-16 bg-gray-800 rounded"></div>
+          </div>
+          <div className="h-4 w-24 bg-gray-800 rounded mt-2"></div>
+          <div className="flex justify-between mt-4">
+            <div className="h-8 w-16 bg-gray-800 rounded"></div>
+            <div className="h-8 w-24 bg-gray-800 rounded"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="space-y-6 p-6 bg-zinc-950 text-zinc-100 w-full">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 p-6 bg-zinc-950 text-zinc-100 w-full h-screen ">
+      <div className="flex justify-between items-center ">
         <h2 className="text-2xl font-bold">Card Details </h2>
         <button
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
@@ -215,6 +236,7 @@ const CardDetails = () => {
           </div>
         </div>
       )}
+      {loading && <SkeletonCard />}
 
       <div className="grid gap-4 md:grid-cols-2 w-3xl">
         {cards?.map((card) => (
