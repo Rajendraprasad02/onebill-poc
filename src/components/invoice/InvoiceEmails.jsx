@@ -207,16 +207,23 @@ const InvoiceEmails = () => {
   };
 
   useEffect(() => {
-    // Check if invoice details are already in localStorage
-    const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
+    try {
+      // Check if invoice details are already in localStorage
+      const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
 
-    if (storedDetails) {
-      setInvoiceDetails(storedDetails);
-    } else {
-      const details = extractInvoiceDetails(emails);
-      setInvoiceDetails(details);
-      // Store the extracted details in localStorage
-      localStorage.setItem("invoiceDetails", JSON.stringify(details));
+      if (storedDetails) {
+        setInvoiceDetails(storedDetails);
+      } else {
+        const details = extractInvoiceDetails(emails);
+        setInvoiceDetails(details);
+        // Store the extracted details in localStorage
+        localStorage.setItem("invoiceDetails", JSON.stringify(details));
+      }
+    } catch (error) {
+      console.error(
+        "Error retrieving or parsing invoice details from localStorage:",
+        error
+      );
     }
   }, [emails]);
 
