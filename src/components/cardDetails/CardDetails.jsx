@@ -285,7 +285,7 @@ const CardDetails = () => {
               </button>
               {!card.isDefault && (
                 <button
-                  onClick={() => handleMarkAsDefault(card.id)}
+                  onClick={() => handleMarkAsDefault(userId, card.id)}
                   className="px-4 py-2 border rounded-lg cursor-pointer"
                 >
                   Make Default
