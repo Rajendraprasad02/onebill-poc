@@ -32,7 +32,7 @@ const CardDetails = () => {
         last4: card.cardNumber.slice(-4), // Get the last 4 digits of the card number
         expiry: card.expiryDate, // Assuming the API already returns this in MM/YY format
         isDefault: card.isDefault || false, // Set default to false if null
-        cvc: cvc,
+        cvc: card.cvc,
       }));
       setCards(transformedCards);
     } catch (err) {
