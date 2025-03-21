@@ -171,7 +171,41 @@ const InvoiceEmails = () => {
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
       </div>
     );
-  console.log("emailsemails", emails);
+
+  const extractInvoiceDetails = (messages) => {
+    return messages.map((message) => {
+      const { subject, message: messageBody } = message;
+      let companyName = "";
+      let detail = "";
+      let amount = "";
+
+      // Extract company name from subject or body
+      if (subject.includes("Invoice")) {
+        companyName =
+          messageBody
+            .match(/(?:Company Name:|Invoice from:)(.*?)(?=\r\n)/)?.[1]
+            ?.trim() || "N/A";
+      }
+
+      // Extract the detail (service description)
+      if (messageBody.includes("Description")) {
+        detail =
+          messageBody.match(/(?:Description:)(.*?)(?=\r\n)/)?.[1]?.trim() ||
+          "N/A";
+      }
+
+      // Extract amount from message body
+      amount = messageBody.match(/\$\d+[,.]?\d*/)?.[0] || "N/A"; // For amounts like "$450.99"
+
+      return {
+        companyName,
+        detail,
+        amount,
+      };
+    });
+  };
+  const invoiceDetails = extractInvoiceDetails(messages);
+  console.log("emailsemails", invoiceDetails);
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
