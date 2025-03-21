@@ -13,6 +13,7 @@ const InvoiceEmails = () => {
   const [error, setError] = useState("");
   const [activeEmailIndex, setActiveEmailIndex] = useState(null); // Track expanded email
   const [activeTab, setActiveTab] = useState("inbox");
+  const [invoiceDetails, setInvoiceDetails] = useState([]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -204,8 +205,22 @@ const InvoiceEmails = () => {
       };
     });
   };
-  const invoiceDetails = extractInvoiceDetails(emails);
-  console.log("emailsemails", invoiceDetails);
+
+  useEffect(() => {
+    // Check if invoice details are already in localStorage
+    const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
+
+    if (storedDetails) {
+      setInvoiceDetails(storedDetails);
+    } else {
+      const details = extractInvoiceDetails(emails);
+      setInvoiceDetails(details);
+      // Store the extracted details in localStorage
+      localStorage.setItem("invoiceDetails", JSON.stringify(details));
+    }
+  }, [emails]);
+
+  console.log(invoiceDetails, "invocedeatils");
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
