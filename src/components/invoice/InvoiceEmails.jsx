@@ -42,7 +42,7 @@ const InvoiceEmails = () => {
   // const provider = queryParams.get("provider");
 
   const extractBillDetails = (message) => {
-    console.log("Processing message:", message);
+    console.log("messageee", message);
 
     if (!message || typeof message !== "string") {
       return {
@@ -53,23 +53,19 @@ const InvoiceEmails = () => {
       };
     }
 
-    // Extract company name (supports various phrases like "Invoice from", "Company Name")
+    // Updated Regex Patterns
     const companyRegex =
-      /(?:Company Name|Invoice from|Billed To|By|From):?\s*([\w\s&.,-]+)/i;
-
-    // Extract amount (handles numbers with or without currency symbols)
-    const amountRegex = /(?:\$|USD\s*)?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i;
-
-    // Extract payment purpose (common invoice-related keywords)
+      /(?:from|by|billed to|invoice from):\s*\**([\w\s&.,-]+)\**/i;
+    const amountRegex = /\**\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?\**/;
     const paymentPurposeRegex =
-      /(subscription|service|purchase|invoice|bill|payment|IT consulting|system integration|maintenance)/i;
-
-    // Extract invoice ID (supports variations like "Invoice #", "Bill #", "Reference #")
-    const invoiceIdRegex = /(?:Invoice|Bill|Reference)\s*#?:?\s*([\w\d-]+)/i;
+      /(subscription|service|purchase|invoice|bill|payment)/i;
+    const invoiceIdRegex =
+      /(?:Invoice|Bill|Reference|Invoice Number)\s*#?:?\s*\**([\w\d-]+)\**/i;
 
     return {
       company: message.match(companyRegex)?.[1]?.trim() || "Unknown",
-      amount: message.match(amountRegex)?.[1] || "Not found",
+      amount:
+        message.match(amountRegex)?.[0]?.replace(/\*/g, "") || "Not found",
       paymentPurpose: message.match(paymentPurposeRegex)?.[0] || "Unspecified",
       invoiceId: message.match(invoiceIdRegex)?.[1] || "N/A",
     };
