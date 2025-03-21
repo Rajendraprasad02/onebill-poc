@@ -148,6 +148,8 @@ const InvoiceEmails = () => {
     fetchEmails();
   }, [token, provider]);
 
+  console.log("emialll", emails);
+
   const toggleEmailDetail = (index) => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
   };
