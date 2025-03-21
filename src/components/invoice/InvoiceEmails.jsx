@@ -42,29 +42,36 @@ const InvoiceEmails = () => {
   // const provider = queryParams.get("provider");
 
   const extractBillDetails = (message) => {
-    console.log("messageee", message);
+    console.log("Processing message:", message);
 
-    if (!message || typeof message !== "string")
+    if (!message || typeof message !== "string") {
       return {
         company: "Unknown",
         amount: "Not found",
         paymentPurpose: "Unspecified",
         invoiceId: "N/A",
       };
+    }
 
-    // Example Regex Patterns
+    // Extract company name (supports various phrases like "Invoice from", "Company Name")
     const companyRegex =
-      /(?:from|by|billed to|invoice from):?\s*([\w\s&.,-]+)/i;
-    const amountRegex = /\$\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g;
+      /(?:Company Name|Invoice from|Billed To|By|From):?\s*([\w\s&.,-]+)/i;
+
+    // Extract amount (handles numbers with or without currency symbols)
+    const amountRegex = /(?:\$|USD\s*)?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i;
+
+    // Extract payment purpose (common invoice-related keywords)
     const paymentPurposeRegex =
-      /(subscription|service|purchase|invoice|bill|payment)/i;
-    const invoiceIdRegex = /(Invoice|Bill|Reference)\s*#?:?\s*([\w\d-]+)/i;
+      /(subscription|service|purchase|invoice|bill|payment|IT consulting|system integration|maintenance)/i;
+
+    // Extract invoice ID (supports variations like "Invoice #", "Bill #", "Reference #")
+    const invoiceIdRegex = /(?:Invoice|Bill|Reference)\s*#?:?\s*([\w\d-]+)/i;
 
     return {
       company: message.match(companyRegex)?.[1]?.trim() || "Unknown",
-      amount: message.match(amountRegex)?.[0] || "Not found",
+      amount: message.match(amountRegex)?.[1] || "Not found",
       paymentPurpose: message.match(paymentPurposeRegex)?.[0] || "Unspecified",
-      invoiceId: message.match(invoiceIdRegex)?.[2] || "N/A",
+      invoiceId: message.match(invoiceIdRegex)?.[1] || "N/A",
     };
   };
 
@@ -201,9 +208,7 @@ const InvoiceEmails = () => {
       </div>
     );
 
-  const dataEmail = extractBillDetails(emails);
-  console.log("dataEmail", dataEmail);
-  console.log("emaillll", emails);
+  emails.forEach((msg) => console.log(extractBillDetails(msg)));
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
