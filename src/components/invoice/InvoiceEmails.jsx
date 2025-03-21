@@ -64,14 +64,12 @@ const InvoiceEmails = () => {
 
           setProfile(userProfile);
 
-          console.log("response", response);
-
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
               id: index, // Use index as a temporary ID if the API doesn't provide one
               subject: email?.subject, // Fix variable reference
               sender: email?.from, // Fix variable reference
-              messageBody: email?.messageBody, // Include message body
+              message: email?.messageBody, // Include message body
               attachments: email?.attachments || [], // Ensure attachments are included
             })) || [];
         } else if (provider === "outlook") {
@@ -83,8 +81,6 @@ const InvoiceEmails = () => {
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
-
-            console.log("response", response);
 
             // Fetch User Profile
             const userProfileRes = await axios.get(
@@ -147,8 +143,6 @@ const InvoiceEmails = () => {
 
     fetchEmails();
   }, [token, provider]);
-
-  console.log("emialll", emails);
 
   const toggleEmailDetail = (index) => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
