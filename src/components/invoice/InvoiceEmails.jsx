@@ -256,7 +256,9 @@ const InvoiceEmails = () => {
                               //   ),
                               // }}
                             >
-                              {email?.message}
+                              <span className="text-red-600">
+                                {email?.message}
+                              </span>
                             </div>
                           ) : (
                             <p className="dark:text-gray-400">
