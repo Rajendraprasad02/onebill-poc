@@ -140,7 +140,7 @@ const CardDetails = () => {
 
     setLoading(true);
     try {
-      await axios.patch(
+      await axios.put(
         `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}/${cardId}`,
         { isDefault: true } // Sending the required field
       );
