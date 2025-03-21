@@ -136,6 +136,8 @@ const CardDetails = () => {
   );
 
   const handleMarkAsDefault = async (userId, cardId) => {
+    console.log("clickedddd");
+
     setLoading(true);
     try {
       await axios.patch(
