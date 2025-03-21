@@ -79,6 +79,8 @@ const BillPayment = () => {
     console.log(`Toggled autopay for bill ${billId}`);
   };
 
+  console.log("invoiceDetails", invoiceDetails);
+
   return (
     <div className="space-y-6">
       {paymentError && (
