@@ -257,7 +257,7 @@ const CardDetails = () => {
                 </span>
               )}
             </div>
-            <p className="text-sm text-gray-500">Expires {card.expiry}</p>
+            <p className="text-sm text-gray-500 my-2">Expires {card.expiry}</p>
             <p className="text-sm text-gray-500">Cvc {card.cvc}</p>
 
             <div className="flex justify-between mt-4">
