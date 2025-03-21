@@ -135,6 +135,23 @@ const CardDetails = () => {
     </div>
   );
 
+  const handleMarkAsDefault = async (userId, cardId) => {
+    setLoading(true);
+    try {
+      await axios.patch(
+        `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}/${cardId}`,
+        { isDefault: true } // Sending the required field
+      );
+
+      // Update the UI by refetching cards
+      fetchUserCards();
+    } catch (error) {
+      console.error("Error marking card as default:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 p-6 bg-zinc-950 text-zinc-100 w-full h-screen ">
       <div className="flex justify-between items-center ">
@@ -258,14 +275,17 @@ const CardDetails = () => {
               )}
             </div>
             <p className="text-sm text-gray-500 my-2">Expires {card.expiry}</p>
-            <p className="text-sm text-gray-500">Cvc {card.cvc}</p>
+            <p className="text-sm text-gray-500">cvc {card.cvc}</p>
 
             <div className="flex justify-between mt-4">
               <button className="px-4 py-2 border rounded-lg cursor-pointer">
                 Edit
               </button>
               {!card.isDefault && (
-                <button className="px-4 py-2 border rounded-lg cursor-pointer">
+                <button
+                  onClick={() => handleMarkAsDefault(card.id)}
+                  className="px-4 py-2 border rounded-lg cursor-pointer"
+                >
                   Make Default
                 </button>
               )}
