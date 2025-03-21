@@ -174,36 +174,44 @@ const InvoiceEmails = () => {
     );
 
   const extractInvoiceDetails = (messages) => {
-    return messages.map((message) => {
-      const { subject, message: messageBody } = message;
-      let companyName = "";
-      let detail = "";
-      let amount = "";
+    return messages
+      .map((message) => {
+        const { subject, message: messageBody } = message;
+        let companyName = "";
+        let detail = "";
+        let amount = "";
 
-      // Extract company name from subject or body
-      if (subject.includes("Invoice")) {
-        companyName =
-          messageBody
-            .match(/(?:Company Name:|Invoice from:)(.*?)(?=\r\n)/)?.[1]
-            ?.trim() || "N/A";
-      }
+        // Extract company name from subject or body
+        if (subject.includes("Invoice")) {
+          companyName =
+            messageBody
+              .match(/(?:Company Name:|Invoice from:)(.*?)(?=\r\n)/)?.[1]
+              ?.trim() || "N/A";
+        }
 
-      // Extract the detail (service description)
-      if (messageBody.includes("Description")) {
-        detail =
-          messageBody.match(/(?:Description:)(.*?)(?=\r\n)/)?.[1]?.trim() ||
-          "N/A";
-      }
+        // Extract the detail (service description)
+        if (messageBody.includes("Description")) {
+          detail =
+            messageBody.match(/(?:Description:)(.*?)(?=\r\n)/)?.[1]?.trim() ||
+            "N/A";
+        }
 
-      // Extract amount from message body
-      amount = messageBody.match(/\$\d+[,.]?\d*/)?.[0] || "N/A"; // For amounts like "$450.99"
+        // Extract amount from message body
+        amount = messageBody.match(/\$\d+[,.]?\d*/)?.[0] || "N/A"; // For amounts like "$450.99"
 
-      return {
-        companyName,
-        detail,
-        amount,
-      };
-    });
+        // Only return if all data points are available (not "N/A")
+        if (companyName !== "N/A" && detail !== "N/A" && amount !== "N/A") {
+          return {
+            companyName,
+            detail,
+            amount,
+          };
+        }
+
+        // If any of the data points are missing, return nothing
+        return null;
+      })
+      .filter((item) => item !== null); // Remove any null entries
   };
 
   const details = extractInvoiceDetails(emails);
