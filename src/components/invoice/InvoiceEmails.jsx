@@ -174,6 +174,8 @@ const InvoiceEmails = () => {
     );
 
   const extractInvoiceDetails = (messages) => {
+    console.log("messageee", messages);
+
     return messages
       .map((message) => {
         const { subject, message: messageBody } = message;
@@ -213,6 +215,8 @@ const InvoiceEmails = () => {
       })
       .filter((item) => item !== null); // Remove any null entries
   };
+
+  console.log("emails_exk", emails);
 
   const details = extractInvoiceDetails(emails);
 
