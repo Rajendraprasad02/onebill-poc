@@ -32,6 +32,7 @@ const CardDetails = () => {
         last4: card.cardNumber.slice(-4), // Get the last 4 digits of the card number
         expiry: card.expiryDate, // Assuming the API already returns this in MM/YY format
         isDefault: card.isDefault || false, // Set default to false if null
+        cvc: cvc,
       }));
       setCards(transformedCards);
     } catch (err) {
@@ -257,7 +258,7 @@ const CardDetails = () => {
               )}
             </div>
             <p className="text-sm text-gray-500">Expires {card.expiry}</p>
-            <p className="text-sm text-gray-500">CVC {card.cvc}</p>
+            <p className="text-sm text-gray-500">Cvc {card.cvc}</p>
 
             <div className="flex justify-between mt-4">
               <button className="px-4 py-2 border rounded-lg cursor-pointer">
