@@ -204,7 +204,7 @@ const InvoiceEmails = () => {
       };
     });
   };
-  const invoiceDetails = extractInvoiceDetails(messages);
+  const invoiceDetails = extractInvoiceDetails(emails);
   console.log("emailsemails", invoiceDetails);
 
   return (
