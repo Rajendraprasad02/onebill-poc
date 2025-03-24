@@ -179,6 +179,8 @@ const InvoiceEmails = () => {
     return messages
       .map((message) => {
         const { id, subject, message: messageBody } = message;
+        console.log("messagemessage", message);
+
         let companyName = "";
         let detail = "";
         let amount = null;
