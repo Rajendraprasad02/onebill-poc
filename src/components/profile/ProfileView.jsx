@@ -15,6 +15,7 @@ const ProfileView = () => {
       setProfile(JSON.parse(storedProfile));
     }
   }, []);
+  console.log("profileprofile", profile);
 
   return (
     <div className="   bg-zinc-950 text-zinc-100 ">
