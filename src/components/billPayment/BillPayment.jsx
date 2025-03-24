@@ -134,15 +134,15 @@ const BillPayment = () => {
       )}
 
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-        <div className="w-full md:w-2/3 bg-white shadow-md rounded-md p-6">
-          <h3 className="text-lg font-bold mb-2">Payment Method</h3>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="w-full md:w-2/3 bg-gray-800 shadow-md rounded-md p-6">
+          <h3 className="text-lg font-bold text-white mb-2">Payment Method</h3>
+          <p className="text-sm text-gray-400 mb-4">
             Select the card you want to use for payment
           </p>
           <select
             value={selectedCard}
             onChange={(e) => setSelectedCard(e.target.value)}
-            className="p-2 border border-gray-300 rounded-md w-full"
+            className="p-2 border border-gray-600 bg-gray-700 text-white rounded-md w-full"
           >
             {cardDetails?.map((i) => (
               <option key={i.id} value={i.id}>
@@ -152,17 +152,17 @@ const BillPayment = () => {
           </select>
         </div>
 
-        <div className="w-full md:w-1/3 bg-white shadow-md rounded-md p-6">
-          <h3 className="text-lg font-bold mb-2">Total Due</h3>
-          <p className="text-sm text-gray-500 mb-4">All pending bills</p>
-          <div className="text-3xl font-bold">
+        <div className="w-full md:w-1/3 bg-gray-800 shadow-md rounded-md p-6">
+          <h3 className="text-lg font-bold text-white mb-2">Total Due</h3>
+          <p className="text-sm text-gray-400 mb-4">All pending bills</p>
+          <div className="text-3xl font-bold text-green-400">
             $
             {invoiceDetails
               .reduce((total, bill) => total + bill.amount, 0)
               .toFixed(2)}
           </div>
           <button
-            className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md"
+            className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
             onClick={() => handlePayment("all")}
           >
             Pay All Bills
@@ -170,24 +170,25 @@ const BillPayment = () => {
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold mb-4">Due Bills</h2>
+      <h2 className="text-2xl font-bold text-white mb-4">Due Bills</h2>
 
       <div className="space-y-4">
         {invoiceDetails.map((bill) => (
-          <div key={bill.id} className="bg-white shadow-md rounded-md p-6">
+          <div key={bill.id} className="bg-gray-800 shadow-md rounded-md p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
-                <h3 className="font-medium text-lg">{bill.service}</h3>
-                <p className="text-sm text-gray-500">
-                  {/* Due on {new Date(bill.dueDate).toLocaleDateString()} */}
-                  {bill.dueDate}
-                </p>
+                <h3 className="font-medium text-lg text-white">
+                  {bill.service}
+                </h3>
+                <p className="text-sm text-gray-400">{bill.dueDate}</p>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="text-xl font-bold">${bill.amount}</div>
+                <div className="text-xl font-bold text-green-400">
+                  ${bill.amount}
+                </div>
                 <button
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
                   onClick={() => handlePayment(bill.id)}
                 >
                   Pay Now
