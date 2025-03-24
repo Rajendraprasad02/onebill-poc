@@ -134,7 +134,7 @@ const BillPayment = () => {
       )}
 
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-        <div className="w-full md:w-2/3 bg-zinc-950 shadow-md rounded-md p-6">
+        <div className="w-full md:w-2/3 bg-zinc-900 shadow-md rounded-md p-6">
           <h3 className="text-lg font-bold text-white mb-2">Payment Method</h3>
           <p className="text-sm text-gray-400 mb-4">
             Select the card you want to use for payment
@@ -142,11 +142,11 @@ const BillPayment = () => {
           <select
             value={selectedCard}
             onChange={(e) => setSelectedCard(e.target.value)}
-            className="p-2 border border-zinc-800 bg-zinc-800 text-white rounded-md w-full"
+            className="p-2 border border-gray-600 bg-gray-700 text-white rounded-md w-full"
           >
             {cardDetails?.map((i) => (
               <option key={i.id} value={i.id}>
-                {i.cardNumber}
+                {"•••• •••• •••• " + i.cardNumber.slice(-4)}
               </option>
             ))}
           </select>
