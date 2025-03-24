@@ -9,7 +9,7 @@ import AuthRedirect from "./components/AuthRedirect";
 import Profile from "./components/profile/Profile";
 import CardDetails from "./components/cardDetails/CardDetails";
 import BillPayment from "./components/billPayment/BillPayment";
-import ProfileView from "./components/profile/profileView";
+import ProfileView from "./components/profile/ProfileView";
 
 const router = createHashRouter([
   { path: "/signup", element: <Signup /> },
