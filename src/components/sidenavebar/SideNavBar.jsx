@@ -11,7 +11,7 @@ const SideNavBar = () => {
     { name: "Inbox", route: "/invoice-emails" },
     { name: "Bill Payment", route: "/bill-payment" },
     { name: "Card Details", route: "/card-details" },
-    { name: "Profile", route: "/profile" },
+    { name: "Profile", route: "/my-profile" },
   ];
 
   // Update active tab based on current route

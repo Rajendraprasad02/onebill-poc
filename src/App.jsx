@@ -10,6 +10,7 @@ import AuthRedirect from "./components/AuthRedirect";
 import Profile from "./components/profile/Profile";
 import CardDetails from "./components/cardDetails/CardDetails";
 import BillPayment from "./components/billPayment/BillPayment";
+import ProfileView from "./components/profile/profileView";
 
 const router = createHashRouter([
   { path: "/signup", element: <Signup /> },
@@ -24,6 +25,7 @@ const router = createHashRouter([
       { element: <InvoiceEmails />, path: "/invoice-emails" },
       { path: "card-details", element: <CardDetails /> },
       { path: "bill-payment", element: <BillPayment /> },
+      { path: "my-profile", element: <ProfileView /> },
     ],
   },
 ]);

@@ -103,7 +103,6 @@ const BillPayment = () => {
         }
       );
       fetchCardDetailsAndMails();
-      setPaymentSuccess(true);
       setPaymentLoader(false);
     } catch (error) {
       setPaymentError(true);

@@ -33,9 +33,9 @@ const Header = ({ setMenuOpen }) => {
           );
 
           const userProfile = response?.data?.userInfo;
-          console.log("userProfile", userProfile);
 
           setProfile(userProfile);
+          localStorage.setItem("userProfile", JSON.stringify(userProfile)); // ✅ Store profile in localStorage
 
           normalizedEmails =
             response?.data?.emails?.map((email, index) => ({
@@ -83,11 +83,15 @@ const Header = ({ setMenuOpen }) => {
             }
 
             // Set Profile State
-            setProfile({
+            const finalProfile = {
               name: userProfile?.displayName,
-              email: userProfile?.mail || userProfile?.userPrincipalName, // Fallback for missing mail
+              email: userProfile?.mail || userProfile?.userPrincipalName,
               profilePicture: profilePictureUrl,
-            });
+            };
+
+            setProfile(finalProfile);
+
+            localStorage.setItem("userProfile", JSON.stringify(finalProfile)); // ✅ Store profile in localStorage
 
             // Normalize Emails
             normalizedEmails =
@@ -136,23 +140,6 @@ const Header = ({ setMenuOpen }) => {
         </div>
       </div>
       <div className="flex items-center gap-4">
-        {/* <div className="flex justify-end items-center gap-2 p-2 rounded-xl cursor-pointer">
-          {profile?.profilePicture && (
-            <img
-              className="w-10 h-10 rounded-full border"
-              src={profile?.profilePicture}
-              alt="Profile"
-            />
-          )}
-          <div>
-            <h1 className="font-bold text-gray-200">
-              {profile?.name || "User"}
-            </h1>
-            <p className="text-sm text-gray-400">
-              {profile?.email || "No Email"}
-            </p>
-          </div>
-        </div> */}
         <div className="flex justify-end items-center gap-2 p-2 rounded-xl cursor-pointer">
           {loading ? (
             // Skeleton Loader
