@@ -155,9 +155,10 @@ const BillPayment = () => {
           <p className="text-sm text-gray-400 mb-4">All pending bills</p>
           <div className="text-3xl font-bold text-green-400">
             $
-            {invoiceDetails
-              .reduce((total, bill) => total + bill.amount, 0)
-              .toFixed(2)}
+            {
+              invoiceDetails.reduce((total, bill) => total + bill.amount, 0)
+              // .toFixed(2)
+            }
           </div>
           <button
             className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md cursor-pointer"
