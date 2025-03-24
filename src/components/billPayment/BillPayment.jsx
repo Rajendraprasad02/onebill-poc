@@ -4,12 +4,31 @@ import { AlertCircle, CheckCircle2 } from "lucide-react";
 import axios from "axios";
 
 const BillPayment = () => {
+  const messages = [
+    "Processing your payment...",
+    "Please don't refresh this page...",
+    "Validating your transaction...",
+    "Almost done...",
+  ];
+  const [currentMessage, setCurrentMessage] = useState(messages[0]);
   const [invoiceDetails, setInvoiceDetails] = useState([]);
   const [cardDetails, setCardDetails] = useState([]);
   const [paymentError, setPaymentError] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentLoader, setPaymentLoader] = useState(false);
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessage((prev) => {
+        const currentIndex = messages.indexOf(prev);
+        return messages[(currentIndex + 1) % messages.length];
+      });
+    }, 2000); // Change message every 2 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   const fetchCardDetailsAndMails = async () => {
     try {
@@ -28,19 +47,6 @@ const BillPayment = () => {
 
   useEffect(() => {
     fetchCardDetailsAndMails();
-
-    // Get the invoice details from localStorage
-    // const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
-
-    // if (storedDetails) {
-    //   const cleanedDetails = storedDetails.map((item) => ({
-    //     ...item,
-    //     service: item.service.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
-    //     dueDate: item.dueDate.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
-    //   }));
-
-    //   setInvoiceDetails(cleanedDetails);
-    // }
   }, []);
 
   // Sample bills data
@@ -86,6 +92,7 @@ const BillPayment = () => {
     // Simulate payment process
     setPaymentError(false);
     setPaymentSuccess(false);
+    setPaymentLoader(true);
 
     try {
       const response = await axios.put(
@@ -95,17 +102,21 @@ const BillPayment = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log("responseresponse", response);
+      fetchCardDetailsAndMails();
       setPaymentSuccess(true);
+      setPaymentLoader(false);
     } catch (error) {
       setPaymentError(true);
     }
   };
 
-  const toggleAutopay = (billId) => {
-    // This would update the autopay status in a real app
-    console.log(`Toggled autopay for bill ${billId}`);
-  };
+  if (!paymentLoader)
+    return (
+      <div className="flex flex-col items-center justify-center h-screen w-full bg-zinc-950">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+        <div className="text-white mt-4">{currentMessage}</div>
+      </div>
+    );
 
   return (
     <div className="h-screen bg-zinc-950 p-6">
