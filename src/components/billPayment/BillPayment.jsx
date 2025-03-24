@@ -26,11 +26,18 @@ const BillPayment = () => {
 
   useEffect(() => {
     fetchCardDetails();
+
     // Get the invoice details from localStorage
     const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
 
     if (storedDetails) {
-      setInvoiceDetails(storedDetails);
+      // Remove asterisks (*) from the start and end of 'service' if present
+      const cleanedDetails = storedDetails.map((item) => ({
+        ...item,
+        service: item.service.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
+      }));
+
+      setInvoiceDetails(cleanedDetails);
     }
   }, []);
 
@@ -166,7 +173,7 @@ const BillPayment = () => {
 
       <div className="space-y-4">
         {invoiceDetails.map((bill) => (
-          <div key={bill.id} className="bg-zinc-950 shadow-md rounded-md p-6">
+          <div key={bill.id} className="bg-white shadow-md rounded-md p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
                 <h3 className="font-medium text-lg">{bill.service}</h3>
@@ -174,21 +181,6 @@ const BillPayment = () => {
                   {/* Due on {new Date(bill.dueDate).toLocaleDateString()} */}
                   {bill.dueDate}
                 </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id={`autopay-${bill.id}`}
-                    checked={bill.autopay}
-                    onChange={() => toggleAutopay(bill.id)}
-                    className="h-4 w-4"
-                  />
-                  <label htmlFor={`autopay-${bill.id}`} className="text-sm">
-                    Auto-Pay
-                  </label>
-                </div>
               </div>
 
               <div className="flex items-center gap-4">
