@@ -224,7 +224,7 @@ const InvoiceEmails = () => {
   const storeBillDetails = async (userId) => {
     try {
       // Ensure details exist and add userId to each entry
-      const billDetailsWithUser = details.map((bill) => ({
+      const billDetailsWithUser = details.map(({ id, ...bill }) => ({
         ...bill,
         userId: userId, // Append userId to each bill
       }));
