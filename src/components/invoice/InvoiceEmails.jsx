@@ -181,7 +181,7 @@ const InvoiceEmails = () => {
         const { id, subject, message: messageBody } = message;
         let companyName = "";
         let detail = "";
-        let amount = "";
+        let amount = null;
 
         // Extract company name from subject or body
         if (subject.includes("Invoice")) {
@@ -205,7 +205,7 @@ const InvoiceEmails = () => {
         }
 
         // Only return if all data points are available (not "N/A")
-        if (companyName !== "N/A" && detail !== "N/A" && amount !== "N/A") {
+        if (companyName !== "N/A" && detail !== "N/A" && amount !== null) {
           return {
             id: id,
             service: companyName,
