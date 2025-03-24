@@ -26,17 +26,17 @@ const ProfileView = () => {
             <div className="flex justify-between">
               <div>
                 <p className="text-gray-400 text-sm">First Name</p>
-                <p className="text-lg font-medium">{user.firstName}</p>
+                <p className="text-lg font-medium">{profile.name}</p>
               </div>
-              <div>
+              {/* <div>
                 <p className="text-gray-400 text-sm">Last Name</p>
                 <p className="text-lg font-medium">{user.lastName}</p>
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-6">
               <div>
                 <p className="text-gray-400 text-sm">Email</p>
-                <p className="text-lg font-medium">{user.email}</p>
+                <p className="text-lg font-medium">{profile.email}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm">Phone</p>
