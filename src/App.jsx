@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-import Login from "./components/login/Login";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import Signup from "./components/login/Signup";
 import InvoiceEmails from "./components/invoice/InvoiceEmails";
