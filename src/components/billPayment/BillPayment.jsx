@@ -20,7 +20,7 @@ const BillPayment = () => {
       );
       console.log("data", data);
 
-      setCardDetails(data);
+      setCardDetails(data?.data);
     } catch (error) {}
   };
 
