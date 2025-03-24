@@ -136,9 +136,11 @@ const BillPayment = () => {
             onChange={(e) => setSelectedCard(e.target.value)}
             className="p-2 border border-gray-300 rounded-md w-full"
           >
-            {cardDetails?.map((i) => {
-              <option value={i?.id}>{i?.cardNumber}</option>;
-            })}
+            {cardDetails?.map((i) => (
+              <option key={i.id} value={i.id}>
+                {i.cardNumber}
+              </option>
+            ))}
           </select>
         </div>
 
