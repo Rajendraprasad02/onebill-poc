@@ -168,7 +168,7 @@ const BillPayment = () => {
 
               <div className="flex items-center gap-4">
                 <div className="text-xl font-bold">
-                  ${bill.amount?.toString()}
+                  ${bill.amount.toFixed(2)}
                 </div>
                 <button
                   className="bg-blue-500 text-white py-2 px-4 rounded-md"
