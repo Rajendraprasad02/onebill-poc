@@ -21,6 +21,7 @@ const InvoiceEmails = () => {
 
   const token = localStorage.getItem("authToken");
   const provider = localStorage.getItem("authProvider");
+  const userId = localStorage.getItem("userId");
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -220,18 +221,25 @@ const InvoiceEmails = () => {
       .filter((item) => item !== null); // Remove null entries
   };
 
-  const storeBillDetails = async () => {
+  const storeBillDetails = async (userId) => {
     try {
+      // Ensure details exist and add userId to each entry
+      const billDetailsWithUser = details.map((bill) => ({
+        ...bill,
+        userId: userId, // Append userId to each bill
+      }));
+
       const response = await axios.post(
         "https://onebill-poc-backend-production.up.railway.app/api/bill-details",
-        details, // Send extracted details in request body
+        billDetailsWithUser, // Send modified data
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      console.log("Bills stored successfully:", response);
+
+      console.log("Bills stored successfully:", response.data);
     } catch (error) {
       console.error(
         "Error storing bill details:",
@@ -241,7 +249,7 @@ const InvoiceEmails = () => {
   };
 
   const details = extractInvoiceDetails(emails);
-  storeBillDetails();
+  storeBillDetails(userId);
 
   if (details.length > 0) {
     localStorage.setItem("invoiceDetails", JSON.stringify(details));
