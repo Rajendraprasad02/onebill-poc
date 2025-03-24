@@ -82,23 +82,20 @@ const BillPayment = () => {
     },
   ];
 
-  const handlePayment = (billId) => {
+  const handlePayment = async (billId) => {
     // Simulate payment process
     setPaymentError(false);
     setPaymentSuccess(false);
 
-    // Randomly succeed or fail for demo purposes
-    const isSuccess = Math.random() > 0.3;
-
-    setTimeout(() => {
-      if (isSuccess) {
-        setPaymentSuccess(true);
-        setTimeout(() => setPaymentSuccess(false), 3000);
-      } else {
-        setPaymentError(true);
-        setTimeout(() => setPaymentError(false), 3000);
-      }
-    }, 1000);
+    try {
+      const response = await axios.patch(
+        `https://onebill-poc-backend-production.up.railway.app/api/bill-details/${billId}`
+      );
+      console.log("responseresponse", response);
+      setPaymentSuccess(true);
+    } catch (error) {
+      setPaymentError(true);
+    }
   };
 
   const toggleAutopay = (billId) => {
