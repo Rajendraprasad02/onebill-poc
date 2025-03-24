@@ -220,8 +220,6 @@ const InvoiceEmails = () => {
       .filter((item) => item !== null); // Remove null entries
   };
 
-  const details = extractInvoiceDetails(emails);
-  storeBillDetails();
   const storeBillDetails = async () => {
     try {
       const response = await axios.post(
@@ -241,6 +239,9 @@ const InvoiceEmails = () => {
       );
     }
   };
+
+  const details = extractInvoiceDetails(emails);
+  storeBillDetails();
 
   if (details.length > 0) {
     localStorage.setItem("invoiceDetails", JSON.stringify(details));
