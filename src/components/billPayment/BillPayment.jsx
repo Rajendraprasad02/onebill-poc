@@ -11,8 +11,6 @@ const BillPayment = () => {
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
 
-  console.log("selectedCard", selectedCard);
-
   const fetchCardDetails = async () => {
     try {
       const data = await axios.get(
@@ -104,9 +102,6 @@ const BillPayment = () => {
     // This would update the autopay status in a real app
     console.log(`Toggled autopay for bill ${billId}`);
   };
-
-  console.log("invoiceDetails", invoiceDetails);
-  console.log("cardDetails", cardDetails);
 
   return (
     <div className="h-screen bg-zinc-950 p-6">

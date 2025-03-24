@@ -172,14 +172,10 @@ const InvoiceEmails = () => {
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
       </div>
     );
-
   const extractInvoiceDetails = (messages) => {
-    console.log("messageee", messages);
-
     return messages
       .map((message) => {
         const { id, subject, message: messageBody } = message;
-        console.log("messagemessage", message);
 
         let companyName = "";
         let detail = "";
@@ -189,15 +185,18 @@ const InvoiceEmails = () => {
         if (subject.includes("Invoice")) {
           companyName =
             messageBody
-              .match(/(?:Company Name:|Invoice from:)(.*?)(?=\r\n)/)?.[1]
-              ?.trim() || "N/A";
+              .match(/(?:Invoice from:)\s*(.*?)(?=\r\n|\n|$)/)?.[1]
+              ?.replace(/\*/g, "") // Remove asterisks
+              .trim() || "N/A";
         }
 
         // Extract the detail (service description)
-        if (messageBody.includes("Description")) {
+        if (messageBody.includes("Billing Period")) {
           detail =
-            messageBody.match(/(?:Description:)(.*?)(?=\r\n)/)?.[1]?.trim() ||
-            "N/A";
+            messageBody
+              .match(/(?:Billing Period:)\s*(.*?)(?=\r\n|\n|$)/)?.[1]
+              ?.replace(/\*/g, "") // Remove asterisks
+              .trim() || "N/A";
         }
 
         // Extract amount from message body
@@ -216,15 +215,32 @@ const InvoiceEmails = () => {
           };
         }
 
-        // If any of the data points are missing, return nothing
-        return null;
+        return null; // Skip if any data is missing
       })
-      .filter((item) => item !== null); // Remove any null entries
+      .filter((item) => item !== null); // Remove null entries
   };
 
   const details = extractInvoiceDetails(emails);
-
-  console.log("detauiksss", details);
+  storeBillDetails();
+  const storeBillDetails = async () => {
+    try {
+      const response = await axios.post(
+        "https://onebill-poc-backend-production.up.railway.app/api/bill-details",
+        details, // Send extracted details in request body
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Bills stored successfully:", response);
+    } catch (error) {
+      console.error(
+        "Error storing bill details:",
+        error.response?.data || error.message
+      );
+    }
+  };
 
   if (details.length > 0) {
     localStorage.setItem("invoiceDetails", JSON.stringify(details));
