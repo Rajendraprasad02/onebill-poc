@@ -35,6 +35,7 @@ const BillPayment = () => {
       const cleanedDetails = storedDetails.map((item) => ({
         ...item,
         service: item.service.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
+        dueDate: item.dueDate.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
       }));
 
       setInvoiceDetails(cleanedDetails);
