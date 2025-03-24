@@ -11,19 +11,23 @@ const BillPayment = () => {
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
 
-  const fetchCardDetails = async () => {
+  const fetchCardDetailsAndMails = async () => {
     try {
-      const data = await axios.get(
+      const cardDetails = await axios.get(
         `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`
       );
-      console.log("data", data);
 
-      setCardDetails(data?.data);
+      const mailDetails = await axios.get(
+        `https://onebill-poc-backend-production.up.railway.app/api/bill-details/userid/${userId}`
+      );
+      console.log("mailDetailsmailDetails", mailDetails);
+
+      setCardDetails(cardDetails?.data);
     } catch (error) {}
   };
 
   useEffect(() => {
-    fetchCardDetails();
+    fetchCardDetailsAndMails();
 
     // Get the invoice details from localStorage
     const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));

@@ -226,7 +226,7 @@ const InvoiceEmails = () => {
       // Ensure details exist and add userId to each entry
       const billDetailsWithUser = details.map(({ id, ...bill }) => ({
         ...bill,
-        userId: userId, // Append userId to each bill
+        userId: Number(userId), // Ensure userId is a number
       }));
 
       const response = await axios.post(
