@@ -169,30 +169,36 @@ const BillPayment = () => {
       <h2 className="text-2xl font-bold text-white mb-4">Due Bills</h2>
 
       <div className="space-y-4">
-        {invoiceDetails.map((bill) => (
-          <div key={bill.id} className="bg-zinc-900 shadow-md rounded-md p-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div className="space-y-1">
-                <h3 className="font-medium text-lg text-white">
-                  {bill.service}
-                </h3>
-                <p className="text-sm text-gray-400">{bill.dueDate}</p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="text-xl font-bold text-green-400">
-                  ${bill.amount}
+        {invoiceDetails.length > 0 ? (
+          invoiceDetails.map((bill) => (
+            <div key={bill.id} className="bg-zinc-900 shadow-md rounded-md p-6">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div className="space-y-1">
+                  <h3 className="font-medium text-lg text-white">
+                    {bill.service}
+                  </h3>
+                  <p className="text-sm text-gray-400">{bill.dueDate}</p>
                 </div>
-                <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
-                  onClick={() => handlePayment(bill.id)}
-                >
-                  Pay Now
-                </button>
+
+                <div className="flex items-center gap-4">
+                  <div className="text-xl font-bold text-green-400">
+                    ${bill.amount}
+                  </div>
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
+                    onClick={() => handlePayment(bill.id)}
+                  >
+                    Pay Now
+                  </button>
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-400 text-lg mt-4">
+            No pending bills
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
