@@ -15,7 +15,7 @@ const BillPayment = () => {
 
   const fetchCardDetails = async () => {
     try {
-      const data = axios.get(
+      const data = await axios.get(
         `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`
       );
       console.log("data", data);
