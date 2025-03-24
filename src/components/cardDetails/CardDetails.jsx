@@ -42,6 +42,7 @@ const CardDetails = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchUserCards();
   }, []); // Empty dependency array to call the effect once
@@ -256,45 +257,50 @@ const CardDetails = () => {
           </div>
         </div>
       )}
-      {loading && <SkeletonCard />}
 
-      <div className="grid gap-4 md:grid-cols-2 w-full">
-        {cards?.map((card) => (
-          <div
-            key={card.id}
-            className={`p-4 border rounded-lg ${
-              card.isDefault ? "border-blue-600" : ""
-            }`}
-          >
-            <div className="flex justify-between items-center">
-              <span className="font-medium">
-                {card.type} •••• {card.last4}
-              </span>
-              {card.isDefault && (
-                <span className="px-2 py-1 text-sm text-blue-600 border border-blue-600 rounded-md">
-                  Default
+      {loading ? (
+        <SkeletonCard />
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 w-full">
+          {cards?.map((card) => (
+            <div
+              key={card.id}
+              className={`p-4 border rounded-lg ${
+                card.isDefault ? "border-blue-600" : ""
+              }`}
+            >
+              <div className="flex justify-between items-center">
+                <span className="font-medium">
+                  {card.type} •••• {card.last4}
                 </span>
-              )}
-            </div>
-            <p className="text-sm text-gray-500 my-2">Expires {card.expiry}</p>
-            <p className="text-sm text-gray-500">cvc {card.cvc}</p>
+                {card.isDefault && (
+                  <span className="px-2 py-1 text-sm text-blue-600 border border-blue-600 rounded-md">
+                    Default
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-gray-500 my-2">
+                Expires {card.expiry}
+              </p>
+              <p className="text-sm text-gray-500">cvc {card.cvc}</p>
 
-            <div className="flex justify-between mt-4">
-              <button className="px-4 py-2 border rounded-lg cursor-pointer">
-                Edit
-              </button>
-              {!card.isDefault && (
-                <button
-                  onClick={() => handleMarkAsDefault(userId, card.id)}
-                  className="px-4 py-2 border rounded-lg cursor-pointer"
-                >
-                  Make Default
+              <div className="flex justify-between mt-4">
+                <button className="px-4 py-2 border rounded-lg cursor-pointer">
+                  Edit
                 </button>
-              )}
+                {!card.isDefault && (
+                  <button
+                    onClick={() => handleMarkAsDefault(userId, card.id)}
+                    className="px-4 py-2 border rounded-lg cursor-pointer"
+                  >
+                    Make Default
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
