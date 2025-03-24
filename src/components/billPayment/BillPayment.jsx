@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
 
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import axios from "axios";
 
 const BillPayment = () => {
   const [invoiceDetails, setInvoiceDetails] = useState([]);
+  const [cardDetails, setCardDetails] = useState([]);
   const [paymentError, setPaymentError] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [selectedCard, setSelectedCard] = useState("1");
+  const [selectedCard, setSelectedCard] = useState();
+  const userId = localStorage.getItem("userId");
+
+  console.log("selectedCard", selectedCard);
+
+  const fetchCardDetails = async () => {
+    try {
+      const data = axios.get(
+        `https://onebill-poc-backend-production.up.railway.app/api/cards/${userId}`
+      );
+      console.log("data", data);
+
+      setCardDetails(data);
+    } catch (error) {}
+  };
+
   useEffect(() => {
+    fetchCardDetails();
     // Get the invoice details from localStorage
     const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
 
@@ -80,6 +98,7 @@ const BillPayment = () => {
   };
 
   console.log("invoiceDetails", invoiceDetails);
+  console.log("cardDetails", cardDetails);
 
   return (
     <div className="space-y-6">
@@ -117,8 +136,9 @@ const BillPayment = () => {
             onChange={(e) => setSelectedCard(e.target.value)}
             className="p-2 border border-gray-300 rounded-md w-full"
           >
-            <option value="1">Visa •••• 4242</option>
-            <option value="2">Mastercard •••• 5678</option>
+            {cardDetails?.map((i) => {
+              <option value={i?.id}>{i?.cardNumber}</option>;
+            })}
           </select>
         </div>
 
@@ -126,7 +146,10 @@ const BillPayment = () => {
           <h3 className="text-lg font-bold mb-2">Total Due</h3>
           <p className="text-sm text-gray-500 mb-4">All pending bills</p>
           <div className="text-3xl font-bold">
-            ${bills.reduce((total, bill) => total + bill.amount, 0).toFixed(2)}
+            $
+            {invoiceDetails
+              .reduce((total, bill) => total + bill.amount, 0)
+              .toFixed(2)}
           </div>
           <button
             className="w-full mt-4 bg-blue-500 text-white py-2 rounded-md"
@@ -141,7 +164,7 @@ const BillPayment = () => {
 
       <div className="space-y-4">
         {invoiceDetails.map((bill) => (
-          <div key={bill.id} className="bg-white shadow-md rounded-md p-6">
+          <div key={bill.id} className="bg-zinc-950 shadow-md rounded-md p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
                 <h3 className="font-medium text-lg">{bill.service}</h3>
