@@ -146,7 +146,8 @@ const BillPayment = () => {
               <div className="space-y-1">
                 <h3 className="font-medium text-lg">{bill.service}</h3>
                 <p className="text-sm text-gray-500">
-                  Due on {new Date(bill.dueDate).toLocaleDateString()}
+                  {/* Due on {new Date(bill.dueDate).toLocaleDateString()} */}
+                  {bill.dueDate}
                 </p>
               </div>
 
@@ -166,7 +167,9 @@ const BillPayment = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="text-xl font-bold">${bill.amount}</div>
+                <div className="text-xl font-bold">
+                  ${bill.amount?.toString()}
+                </div>
                 <button
                   className="bg-blue-500 text-white py-2 px-4 rounded-md"
                   onClick={() => handlePayment(bill.id)}

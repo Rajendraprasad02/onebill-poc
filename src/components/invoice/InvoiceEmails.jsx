@@ -199,7 +199,10 @@ const InvoiceEmails = () => {
         }
 
         // Extract amount from message body
-        amount = messageBody.match(/\$\d+[,.]?\d*/)?.[0] || "N/A"; // For amounts like "$450.99"
+        const amountMatch = messageBody.match(/\$([\d,]+\.\d{2})/);
+        if (amountMatch) {
+          amount = parseFloat(amountMatch[1].replace(/,/g, "")); // Convert to number
+        }
 
         // Only return if all data points are available (not "N/A")
         if (companyName !== "N/A" && detail !== "N/A" && amount !== "N/A") {
@@ -217,28 +220,15 @@ const InvoiceEmails = () => {
       .filter((item) => item !== null); // Remove any null entries
   };
 
-  console.log("emails_exk", emails);
-
   const details = extractInvoiceDetails(emails);
-
-  console.log("Extracted Details:", details); // Check if the function returns the expected data
 
   if (details.length > 0) {
     localStorage.setItem("invoiceDetails", JSON.stringify(details));
-    console.log(
-      "Stored Invoice Details:",
-      localStorage.getItem("invoiceDetails")
-    );
   } else {
     console.warn("No valid invoice details extracted.");
   }
 
   localStorage.setItem("invoiceDetails", JSON.stringify(details));
-
-  console.log(
-    "Stored Invoice Details:",
-    localStorage.getItem("invoiceDetails")
-  );
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
