@@ -222,6 +222,8 @@ const InvoiceEmails = () => {
 
   const details = extractInvoiceDetails(emails);
 
+  console.log("detauiksss", details);
+
   if (details.length > 0) {
     localStorage.setItem("invoiceDetails", JSON.stringify(details));
   } else {

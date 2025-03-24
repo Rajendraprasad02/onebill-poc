@@ -167,9 +167,7 @@ const BillPayment = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="text-xl font-bold">
-                  ${bill.amount.toFixed(2)}
-                </div>
+                <div className="text-xl font-bold">${bill.amount}</div>
                 <button
                   className="bg-blue-500 text-white py-2 px-4 rounded-md"
                   onClick={() => handlePayment(bill.id)}
