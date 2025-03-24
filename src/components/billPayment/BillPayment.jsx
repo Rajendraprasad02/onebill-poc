@@ -89,7 +89,7 @@ const BillPayment = () => {
 
     try {
       const response = await axios.patch(
-        `https://onebill-poc-backend-production.up.railway.app/api/bill-details/${billId}`,
+        `https://onebill-poc-backend-production.up.railway.app/api/bill-details/update/${billId}`,
         { isPaid: true } // Sending the update payload
       );
       console.log("responseresponse", response);
