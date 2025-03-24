@@ -109,7 +109,7 @@ const BillPayment = () => {
   console.log("cardDetails", cardDetails);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-zinc-950">
       {paymentError && (
         <div className="bg-red-500 text-white p-4 rounded-md flex items-center">
           <AlertCircle className="h-4 w-4 mr-2" />
@@ -134,7 +134,7 @@ const BillPayment = () => {
       )}
 
       <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-        <div className="w-full md:w-2/3 bg-gray-800 shadow-md rounded-md p-6">
+        <div className="w-full md:w-2/3 bg-zinc-950 shadow-md rounded-md p-6">
           <h3 className="text-lg font-bold text-white mb-2">Payment Method</h3>
           <p className="text-sm text-gray-400 mb-4">
             Select the card you want to use for payment
@@ -152,7 +152,7 @@ const BillPayment = () => {
           </select>
         </div>
 
-        <div className="w-full md:w-1/3 bg-gray-800 shadow-md rounded-md p-6">
+        <div className="w-full md:w-1/3 bg-zinc-950 shadow-md rounded-md p-6">
           <h3 className="text-lg font-bold text-white mb-2">Total Due</h3>
           <p className="text-sm text-gray-400 mb-4">All pending bills</p>
           <div className="text-3xl font-bold text-green-400">
@@ -174,7 +174,7 @@ const BillPayment = () => {
 
       <div className="space-y-4">
         {invoiceDetails.map((bill) => (
-          <div key={bill.id} className="bg-gray-800 shadow-md rounded-md p-6">
+          <div key={bill.id} className="bg-zinc-950 shadow-md rounded-md p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">
                 <h3 className="font-medium text-lg text-white">
