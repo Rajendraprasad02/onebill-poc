@@ -21,7 +21,7 @@ const BillPayment = () => {
         `https://onebill-poc-backend-production.up.railway.app/api/bill-details/userid/${userId}`
       );
       console.log("mailDetailsmailDetails", mailDetails);
-
+      setInvoiceDetails(mailDetails?.data);
       setCardDetails(cardDetails?.data);
     } catch (error) {}
   };
@@ -30,18 +30,17 @@ const BillPayment = () => {
     fetchCardDetailsAndMails();
 
     // Get the invoice details from localStorage
-    const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
+    // const storedDetails = JSON.parse(localStorage.getItem("invoiceDetails"));
 
-    if (storedDetails) {
-      // Remove asterisks (*) from the start and end of 'service' if present
-      const cleanedDetails = storedDetails.map((item) => ({
-        ...item,
-        service: item.service.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
-        dueDate: item.dueDate.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
-      }));
+    // if (storedDetails) {
+    //   const cleanedDetails = storedDetails.map((item) => ({
+    //     ...item,
+    //     service: item.service.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
+    //     dueDate: item.dueDate.replace(/^\*+|\*+$/g, ""), // Removes leading & trailing *
+    //   }));
 
-      setInvoiceDetails(cleanedDetails);
-    }
+    //   setInvoiceDetails(cleanedDetails);
+    // }
   }, []);
 
   // Sample bills data
