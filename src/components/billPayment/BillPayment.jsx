@@ -140,7 +140,7 @@ const BillPayment = () => {
       <h2 className="text-2xl font-bold mb-4">Due Bills</h2>
 
       <div className="space-y-4">
-        {bills.map((bill) => (
+        {invoiceDetails.map((bill) => (
           <div key={bill.id} className="bg-white shadow-md rounded-md p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div className="space-y-1">

@@ -178,7 +178,7 @@ const InvoiceEmails = () => {
 
     return messages
       .map((message) => {
-        const { subject, message: messageBody } = message;
+        const { id, subject, message: messageBody } = message;
         let companyName = "";
         let detail = "";
         let amount = "";
@@ -204,9 +204,10 @@ const InvoiceEmails = () => {
         // Only return if all data points are available (not "N/A")
         if (companyName !== "N/A" && detail !== "N/A" && amount !== "N/A") {
           return {
-            companyName,
-            detail,
-            amount,
+            id: id,
+            service: companyName,
+            dueDate: detail,
+            amount: amount,
           };
         }
 
