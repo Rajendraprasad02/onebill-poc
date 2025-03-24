@@ -48,7 +48,7 @@ const Signup = () => {
               </svg>
               Continue with Google
             </button>
-            <button
+            {/* <button
               onClick={() => handleOAuthLogin("yahoo")}
               className="w-full bg-purple-700 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-3 mb-3 cursor-pointer"
             >
@@ -66,7 +66,7 @@ const Signup = () => {
                 <circle cx="303" cy="308" r="38"></circle>
               </svg>
               Continue with Yahoo
-            </button>
+            </button> */}
             <button
               onClick={() => handleOAuthLogin("outlook")}
               className="w-full bg-blue-600 text-white font-medium py-3 rounded-lg flex items-center justify-center gap-3 cursor-pointer"
