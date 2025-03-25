@@ -137,7 +137,6 @@ const AuthRedirect = () => {
 
         // Store Profile & Emails in localStorage
         localStorage.setItem("userProfile", JSON.stringify(userProfile));
-        localStorage.setItem("emails", JSON.stringify(normalizedEmails));
       } catch (error) {
         console.error("Error fetching emails/profile:", error);
       }
