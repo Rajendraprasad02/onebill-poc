@@ -19,6 +19,8 @@ const BillPayment = () => {
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
 
+  console.log("userId", userId);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentMessage((prev) => {

@@ -19,6 +19,7 @@ const CardDetails = () => {
   const [error, setError] = useState(null);
 
   const userId = localStorage.getItem("userId");
+  console.log("userId", userId);
 
   const fetchUserCards = async () => {
     try {
