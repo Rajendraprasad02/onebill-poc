@@ -24,6 +24,8 @@ const Profile = () => {
 
   useEffect(() => {
     const storedProfile = localStorage.getItem("userProfile");
+    console.log("storedProfile", storedProfile);
+
     if (storedProfile) {
       setProfile(JSON.parse(storedProfile));
     }

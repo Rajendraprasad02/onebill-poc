@@ -39,13 +39,10 @@ const AuthRedirect = () => {
 
   useEffect(() => {
     if (!token) {
-      setError("No token found.");
-      setLoading(false);
       return;
     }
 
     const fetchEmails = async () => {
-      setLoading(true);
       try {
         let response;
         let normalizedEmails = [];
