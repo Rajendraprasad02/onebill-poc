@@ -41,6 +41,119 @@ const InvoiceEmails = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
+  // useEffect(() => {
+  //   if (!token) {
+  //     setError("No token found.");
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const fetchEmails = async () => {
+  //     setLoading(true);
+  //     try {
+  //       let response;
+  //       let normalizedEmails = [];
+
+  //       if (provider === "google") {
+  //         response = await axios.get(
+  //           // `http://localhost:3000/api/emails?token=${token}`
+  //           `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+  //         );
+
+  //         console.log("responseresponse", response);
+
+  //         const userProfile = response?.data?.userInfo;
+
+  //         setProfile(userProfile);
+
+  //         console.log("receivedHeader",receivedHeader);
+  //         console.log("receivedTimestamp",receivedTimestamp);
+
+  //         normalizedEmails =
+  //         response?.data?.emails?.map((email, index) => (
+
+  //             {
+  //             id: index, // Use index as a temporary ID if the API doesn't provide one
+  //             subject: email?.subject, // Fix variable reference
+  //             sender: email?.from, // Fix variable reference
+  //             message: email?.messageBody, // Include message body
+  //             attachments: email?.attachments || [], // Ensure attachments are included
+  //             received:receivedTimestamp
+  //           })) || [];
+  //       } else if (provider === "outlook") {
+  //         try {
+  //           // Fetch Outlook Emails with "invoice" in Subject
+  //           const response = await axios.get(
+  //             "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
+
+  //           console.log("responseresponse", response);
+
+  //           // Fetch User Profile
+  //           const userProfileRes = await axios.get(
+  //             "https://graph.microsoft.com/v1.0/me",
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
+
+  //           const userProfile = userProfileRes.data;
+
+  //           let profilePictureUrl =
+  //             "https://static.vecteezy.com/system/resources/previews/009/734/564/non_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"; // Default Image
+  //           try {
+  //             const profilePictureRes = await axios.get(
+  //               "https://graph.microsoft.com/v1.0/me/photo/$value",
+  //               {
+  //                 headers: { Authorization: `Bearer ${token}` },
+  //                 responseType: "blob",
+  //               }
+  //             );
+
+  //             const imageUrl = URL.createObjectURL(profilePictureRes.data);
+  //             profilePictureUrl = imageUrl;
+  //           } catch (error) {
+  //             console.warn("No profile picture found. Using default.");
+  //           }
+
+  //           // Set Profile State
+  //           setProfile({
+  //             name: userProfile?.displayName,
+  //             email: userProfile?.mail || userProfile?.userPrincipalName, // Fallback for missing mail
+  //             profilePicture: profilePictureUrl,
+  //           });
+
+  //           // Normalize Emails
+  //           normalizedEmails =
+  //             response?.data?.value?.map((email) => ({
+  //               id: email.id,
+  //               subject: email.subject,
+  //               sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
+  //               receivedAt: email.receivedDateTime,
+  //               message: email?.body?.content,
+  //             })) || [];
+  //         } catch (error) {
+  //           console.error("Error fetching Outlook emails/profile:", error);
+  //         }
+  //       } else {
+  //         throw new Error("Invalid provider");
+  //       }
+
+  //       setEmails(normalizedEmails);
+  //     } catch (error) {
+  //       console.error("Error fetching emails:", error);
+  //       setError("Failed to fetch emails.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchEmails();
+  // }, [token, provider]);
+
   useEffect(() => {
     if (!token) {
       setError("No token found.");
@@ -56,30 +169,16 @@ const InvoiceEmails = () => {
 
         if (provider === "google") {
           response = await axios.get(
-            // `http://localhost:3000/api/emails?token=${token}`
             `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
           );
 
-          console.log("responseresponse", response);
+          console.log("Response from Google API:", response);
 
           const userProfile = response?.data?.userInfo;
-
           setProfile(userProfile);
 
-          // normalizedEmails =
-          // response?.data?.emails?.map((email, index) => (
-          //   const receivedHeader = email?.payload?.headers?.find((i) => i?.name === "Received")?.value;
-          //   const receivedTimestamp = receivedHeader?.match(/(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} [-+]\d{4} \(\w+\))/)?.[0];
-
-          //     {
-          //     id: index, // Use index as a temporary ID if the API doesn't provide one
-          //     subject: email?.subject, // Fix variable reference
-          //     sender: email?.from, // Fix variable reference
-          //     message: email?.messageBody, // Include message body
-          //     attachments: email?.attachments || [], // Ensure attachments are included
-          //     received:receivedTimestamp
-          //   })) || [];
-          const normalizedEmails =
+          // Normalize Emails
+          normalizedEmails =
             response?.data?.emails?.map((email, index) => {
               const receivedHeader = email?.payload?.headers?.find(
                 (i) => i?.name === "Received"
@@ -87,28 +186,30 @@ const InvoiceEmails = () => {
               const receivedTimestamp = receivedHeader?.match(
                 /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} [-+]\d{4} \(\w+\))/
               )?.[0];
-              console.log("receivedHeader", receivedHeader);
-              console.log("receivedTimestamp", receivedTimestamp);
+
+              console.log("Received Header:", receivedHeader);
+              console.log("Received Timestamp:", receivedTimestamp);
+
               return {
                 id: index, // Use index as a temporary ID if the API doesn't provide one
                 subject: email?.subject,
                 sender: email?.from,
                 message: email?.messageBody,
                 attachments: email?.attachments || [],
-                received: receivedTimestamp, // Extracted timestamp from the "Received" header
+                received: receivedTimestamp, // Extracted timestamp
               };
             }) || [];
         } else if (provider === "outlook") {
           try {
             // Fetch Outlook Emails with "invoice" in Subject
-            const response = await axios.get(
+            const emailResponse = await axios.get(
               "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
               {
                 headers: { Authorization: `Bearer ${token}` },
               }
             );
 
-            console.log("responseresponse", response);
+            console.log("Response from Outlook API:", emailResponse);
 
             // Fetch User Profile
             const userProfileRes = await axios.get(
@@ -146,7 +247,7 @@ const InvoiceEmails = () => {
 
             // Normalize Emails
             normalizedEmails =
-              response?.data?.value?.map((email) => ({
+              emailResponse?.data?.value?.map((email) => ({
                 id: email.id,
                 subject: email.subject,
                 sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
@@ -455,7 +556,7 @@ const InvoiceEmails = () => {
                     </p>
                   </div>
                   <p className="text-gray-500 dark:text-gray-400">
-                    {email?.received || "-"}
+                    {email?.received || "No Subject"}
                   </p>
                 </div>
 
