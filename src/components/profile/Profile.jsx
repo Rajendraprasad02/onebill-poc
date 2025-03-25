@@ -19,7 +19,6 @@ const Profile = () => {
     const storedProfile = localStorage.getItem("userProfile");
     return storedProfile ? JSON.parse(storedProfile) : {};
   });
-  console.log("profileprofileprofile", profile);
 
   useEffect(() => {
     const updateProfile = () => {
@@ -233,8 +232,10 @@ const Profile = () => {
 
         const result = await response.json();
 
+        console.log("resultresult", result);
+
         if (response.ok) {
-          navigate("/invoice-emails"); // Redirect after successful user & card creation
+          navigate("/"); // Redirect after successful user & card creation
         } else {
           console.error("User creation failed:", result);
         }
