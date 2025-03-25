@@ -2,15 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import DOMPurify from "dompurify";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { format, parse } from "date-fns";
+import { LogOut, Menu, Receipt, Search } from "lucide-react";
 
 const InvoiceEmails = () => {
   const [emails, setEmails] = useState([]);
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [activeEmailIndex, setActiveEmailIndex] = useState(null);
+  const [activeEmailIndex, setActiveEmailIndex] = useState(null); // Track expanded email
+  const [activeTab, setActiveTab] = useState("inbox");
+  const [invoiceDetails, setInvoiceDetails] = useState([]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -73,17 +76,8 @@ const InvoiceEmails = () => {
               received: email?.payload?.headers
                 ?.find((i) => i?.name === "Received")
                 ?.value?.match(
-                  /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} [-+]\d{4})/
-                )?.[0]
-                ? format(
-                    parse(
-                      receivedRaw,
-                      "EEE, dd MMM yyyy HH:mm:ss X",
-                      new Date()
-                    ),
-                    "EEE, dd MMM yyyy hh:mm:ss a"
-                  )
-                : null,
+                  /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2})/
+                )?.[0],
             })) || [];
         } else if (provider === "outlook") {
           try {
