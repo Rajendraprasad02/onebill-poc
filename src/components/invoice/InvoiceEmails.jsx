@@ -23,6 +23,10 @@ const InvoiceEmails = () => {
   const provider = localStorage.getItem("authProvider");
   const userId = localStorage.getItem("userId");
 
+  const formatReceivedDateTime = (isoString) => {
+    return format(parseISO(isoString), "EEE, dd MMM yyyy hh:mm:ss a");
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
@@ -131,7 +135,7 @@ const InvoiceEmails = () => {
                 id: email.id,
                 subject: email.subject,
                 sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
-                receivedAt: email.receivedDateTime,
+                received: formatReceivedDateTime(email.receivedDateTime),
                 message: email?.body?.content,
               })) || [];
           } catch (error) {
