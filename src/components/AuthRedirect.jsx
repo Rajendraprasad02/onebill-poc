@@ -148,7 +148,7 @@ const AuthRedirect = () => {
       if (isNewUser) {
         navigate("/profile"); // Redirect to profile setup
       } else {
-        navigate("/"); // Redirect to dashboard
+        navigate("/invoice-emails"); // Redirect to dashboard
       }
     };
 

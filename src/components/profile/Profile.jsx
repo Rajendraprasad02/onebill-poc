@@ -235,7 +235,7 @@ const Profile = () => {
         console.log("resultresult", result);
 
         if (response.ok) {
-          navigate("/"); // Redirect after successful user & card creation
+          navigate("/invoice-emails"); // Redirect after successful user & card creation
         } else {
           console.error("User creation failed:", result);
         }
