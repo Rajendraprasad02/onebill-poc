@@ -16,8 +16,6 @@ const BillPayment = () => {
   const [paidBills, setPaidBills] = useState([]);
   const [dueBills, setDueBills] = useState([]);
   const [cardDetails, setCardDetails] = useState([]);
-  const [paymentError, setPaymentError] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
@@ -113,8 +111,6 @@ const BillPayment = () => {
 
   const handlePayment = async (billId) => {
     // Simulate payment process
-    setPaymentError(false);
-    setPaymentSuccess(false);
     setPaymentLoader(true);
 
     try {
@@ -139,7 +135,6 @@ const BillPayment = () => {
         theme: "dark",
       });
     } catch (error) {
-      setPaymentError(true);
       toast.error("Payment failed! Please try again.", {
         position: "top-right",
         autoClose: 3000,
@@ -193,7 +188,7 @@ const BillPayment = () => {
             <div className="text-3xl font-bold text-green-400">
               $
               {
-                invoiceDetails.reduce((total, bill) => total + bill.amount, 0)
+                dueBills.reduce((total, bill) => total + Number(bill.amount), 0)
                 // .toFixed(2)
               }
             </div>
@@ -211,8 +206,8 @@ const BillPayment = () => {
         <div className="space-y-8">
           {/* Due Bills Section */}
           <div className="my-4">
-            <h2 className="text-xl font-semibold text-white ">Pending Bills</h2>
-            <div className="space-y-4 my-4">
+            <h2 className="text-xl font-semibold text-white">Pending Bills</h2>
+            <div className="space-y-4 my-4 max-h-[300px] overflow-y-auto">
               {dueBills.length > 0 ? (
                 dueBills.map((bill) => (
                   <div
@@ -252,7 +247,7 @@ const BillPayment = () => {
           {/* Paid Bills Section */}
           <div className="my-4">
             <h2 className="text-xl font-semibold text-white">Paid Bills</h2>
-            <div className="space-y-4 my-4">
+            <div className="space-y-4 my-4 max-h-[300px] overflow-y-auto">
               {paidBills.length > 0 ? (
                 paidBills.map((bill) => (
                   <div
