@@ -259,6 +259,8 @@ const InvoiceEmails = () => {
 
   localStorage.setItem("invoiceDetails", JSON.stringify(details));
 
+  console.log("emoll", emails);
+
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100 w-full">
       <div className="flex flex-1">
