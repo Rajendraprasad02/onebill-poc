@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-import { AlertCircle, CheckCircle2 } from "lucide-react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BillPayment = () => {
   const messages = [
@@ -126,8 +127,29 @@ const BillPayment = () => {
       );
       fetchCardDetailsAndMails();
       setPaymentLoader(false);
+      // Show success toast
+      toast.success("Payment successful!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } catch (error) {
       setPaymentError(true);
+      toast.error("Payment failed! Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
@@ -140,147 +162,132 @@ const BillPayment = () => {
     );
 
   return (
-    <div className="h-screen bg-zinc-950 p-6">
-      {paymentError && (
-        <div className="bg-red-500 text-white p-4 rounded-md flex items-center">
-          <AlertCircle className="h-4 w-4 mr-2" />
-          <div>
-            <strong>Payment Failed</strong>
-            <p>
-              There was an error processing your payment. Please try again or
-              use a different payment method.
+    <>
+      <ToastContainer />
+
+      <div className="h-screen bg-zinc-950 p-6">
+        <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
+          <div className="w-full md:w-2/3 bg-zinc-900 shadow-md rounded-md p-6">
+            <h3 className="text-lg font-bold text-white mb-2">
+              Payment Method
+            </h3>
+            <p className="text-sm text-gray-400 mb-4">
+              Select the card you want to use for payment
             </p>
+            <select
+              value={selectedCard}
+              onChange={(e) => setSelectedCard(e.target.value)}
+              className="p-2 border border-gray-600 bg-gray-700 text-white rounded-md w-full cursor-pointer"
+            >
+              {cardDetails?.map((i) => (
+                <option key={i.id} value={i.id}>
+                  {"•••• •••• •••• " + i.cardNumber.slice(-4)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="w-full md:w-1/3 bg-zinc-900 shadow-md rounded-md p-6 border border-zinc-300">
+            <h3 className="text-lg font-bold text-white mb-2">Total Due</h3>
+            <p className="text-sm text-gray-400 mb-4">All pending bills</p>
+            <div className="text-3xl font-bold text-green-400">
+              $
+              {
+                invoiceDetails.reduce((total, bill) => total + bill.amount, 0)
+                // .toFixed(2)
+              }
+            </div>
+            <button
+              className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md cursor-pointer"
+              onClick={() => handlePayment("all")}
+            >
+              Pay All Bills
+            </button>
           </div>
         </div>
-      )}
 
-      {paymentSuccess && (
-        <div className="bg-green-50 text-green-800 border-green-200 p-4 rounded-md flex items-center">
-          <CheckCircle2 className="h-4 w-4 text-green-600 mr-2" />
-          <div>
-            <strong>Payment Successful</strong>
-            <p>Your payment has been processed successfully.</p>
-          </div>
-        </div>
-      )}
+        <h2 className="text-2xl font-bold text-white mb-4">Due Bills</h2>
 
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-        <div className="w-full md:w-2/3 bg-zinc-900 shadow-md rounded-md p-6">
-          <h3 className="text-lg font-bold text-white mb-2">Payment Method</h3>
-          <p className="text-sm text-gray-400 mb-4">
-            Select the card you want to use for payment
-          </p>
-          <select
-            value={selectedCard}
-            onChange={(e) => setSelectedCard(e.target.value)}
-            className="p-2 border border-gray-600 bg-gray-700 text-white rounded-md w-full cursor-pointer"
-          >
-            {cardDetails?.map((i) => (
-              <option key={i.id} value={i.id}>
-                {"•••• •••• •••• " + i.cardNumber.slice(-4)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="w-full md:w-1/3 bg-zinc-900 shadow-md rounded-md p-6 border border-zinc-300">
-          <h3 className="text-lg font-bold text-white mb-2">Total Due</h3>
-          <p className="text-sm text-gray-400 mb-4">All pending bills</p>
-          <div className="text-3xl font-bold text-green-400">
-            $
-            {
-              invoiceDetails.reduce((total, bill) => total + bill.amount, 0)
-              // .toFixed(2)
-            }
-          </div>
-          <button
-            className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md cursor-pointer"
-            onClick={() => handlePayment("all")}
-          >
-            Pay All Bills
-          </button>
-        </div>
-      </div>
-
-      <h2 className="text-2xl font-bold text-white mb-4">Due Bills</h2>
-
-      <div className="space-y-8">
-        {/* Due Bills Section */}
-        <div>
-          <h2 className="text-xl font-semibold text-white">Pending Bills</h2>
-          <div className="space-y-4">
-            {dueBills.length > 0 ? (
-              dueBills.map((bill) => (
-                <div
-                  key={bill.id}
-                  className="bg-zinc-900 shadow-md rounded-md p-6"
-                >
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div className="space-y-1">
-                      <h3 className="font-medium text-lg text-white">
-                        {bill.service}
-                      </h3>
-                      <p className="text-sm text-gray-400">{bill.dueDate}</p>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      <div className="text-xl font-bold text-green-400">
-                        ${bill.amount}
+        <div className="space-y-8">
+          {/* Due Bills Section */}
+          <div className="my-4">
+            <h2 className="text-xl font-semibold text-white ">Pending Bills</h2>
+            <div className="space-y-4 my-4">
+              {dueBills.length > 0 ? (
+                dueBills.map((bill) => (
+                  <div
+                    key={bill.id}
+                    className="bg-zinc-900 shadow-md rounded-md p-6"
+                  >
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div className="space-y-1">
+                        <h3 className="font-medium text-lg text-white">
+                          {bill.service}
+                        </h3>
+                        <p className="text-sm text-gray-400">{bill.dueDate}</p>
                       </div>
-                      <button
-                        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
-                        onClick={() => handlePayment(bill.id)}
-                      >
-                        Pay Now
-                      </button>
+
+                      <div className="flex items-center gap-4">
+                        <div className="text-xl font-bold text-green-400">
+                          ${bill.amount}
+                        </div>
+                        <button
+                          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
+                          onClick={() => handlePayment(bill.id)}
+                        >
+                          Pay Now
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-400 text-lg mt-4">
+                  No pending bills
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-400 text-lg mt-4">
-                No pending bills
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Paid Bills Section */}
-        <div>
-          <h2 className="text-xl font-semibold text-white">Paid Bills</h2>
-          <div className="space-y-4">
-            {paidBills.length > 0 ? (
-              paidBills.map((bill) => (
-                <div
-                  key={bill.id}
-                  className="bg-zinc-800 shadow-md rounded-md p-6 opacity-70"
-                >
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div className="space-y-1">
-                      <h3 className="font-medium text-lg text-white">
-                        {bill.service}
-                      </h3>
-                      <p className="text-sm text-gray-400">{bill.dueDate}</p>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                      <div className="text-xl font-bold text-green-400">
-                        ${bill.amount}
+          {/* Paid Bills Section */}
+          <div className="my-4">
+            <h2 className="text-xl font-semibold text-white">Paid Bills</h2>
+            <div className="space-y-4 my-4">
+              {paidBills.length > 0 ? (
+                paidBills.map((bill) => (
+                  <div
+                    key={bill.id}
+                    className="bg-zinc-800 shadow-md rounded-md p-6 opacity-70"
+                  >
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div className="space-y-1">
+                        <h3 className="font-medium text-lg text-white">
+                          {bill.service}
+                        </h3>
+                        <p className="text-sm text-gray-400">{bill.dueDate}</p>
                       </div>
-                      <span className="text-green-500 font-medium">Paid</span>
+                      <div className="">
+                        <span className="text-green-500 font-medium">Paid</span>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <div className="text-xl font-bold text-green-400">
+                          ${bill.amount}
+                        </div>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-400 text-lg mt-4">
+                  No paid bills
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-400 text-lg mt-4">
-                No paid bills
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default BillPayment;
