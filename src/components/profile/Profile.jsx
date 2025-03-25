@@ -202,7 +202,7 @@ const Profile = () => {
       const userPayload = {
         username: formData?.firstName + formData?.lastName,
         password: formData?.password,
-        email: formData?.email,
+        email: profile?.email,
         cards: formData?.cards.map((card) => ({
           cardHolder: card.cardName,
           cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
@@ -366,7 +366,8 @@ const Profile = () => {
                       id="email"
                       name="email"
                       type="email"
-                      value={formData.email}
+                      value={profile.email}
+                      disabled="true"
                       onChange={handleUserChange}
                       className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="john.doe@example.com"
