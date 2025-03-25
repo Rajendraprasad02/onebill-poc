@@ -15,10 +15,20 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const [profile, setProfile] = useState({});
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem("authToken");
   const provider = localStorage.getItem("authProvider");
+
+  useEffect(() => {
+    const storedProfile = localStorage.getItem("userProfile");
+    if (storedProfile) {
+      setProfile(JSON.parse(storedProfile));
+    }
+  }, []);
+  console.log("profileprofile", profile);
 
   const [formData, setFormData] = useState({
     firstName: "",
