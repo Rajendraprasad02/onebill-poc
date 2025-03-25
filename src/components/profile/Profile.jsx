@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import {
   Plus,
@@ -15,22 +15,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const userId = localStorage.getItem("userId");
-  const provider = localStorage.getItem("authProvider");
-  const token = localStorage.getItem("authToken");
-  const [profile, setProfile] = useState({});
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedProfile = localStorage.getItem("userProfile");
-    console.log("storedProfile", storedProfile);
-
-    if (storedProfile) {
-      setProfile(JSON.parse(storedProfile));
-    }
-  }, []);
-  console.log("profileprofile", profile);
+  const token = localStorage.getItem("authToken");
+  const provider = localStorage.getItem("authProvider");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -204,7 +192,7 @@ const Profile = () => {
       const userPayload = {
         username: formData?.firstName + formData?.lastName,
         password: formData?.password,
-        email: profile?.email,
+        email: formData?.email,
         cards: formData?.cards.map((card) => ({
           cardHolder: card.cardName,
           cardNumber: card.cardNumber.replace(/\s+/g, ""), // Remove spaces
@@ -368,8 +356,7 @@ const Profile = () => {
                       id="email"
                       name="email"
                       type="email"
-                      value={profile.email}
-                      disabled="true"
+                      value={formData.email}
                       onChange={handleUserChange}
                       className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="john.doe@example.com"
