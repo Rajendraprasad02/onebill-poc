@@ -12,6 +12,8 @@ const BillPayment = () => {
   ];
   const [currentMessage, setCurrentMessage] = useState(messages[0]);
   const [invoiceDetails, setInvoiceDetails] = useState([]);
+  const [paidBills, setPaidBills] = useState([]);
+  const [dueBills, setDueBills] = useState([]);
   const [cardDetails, setCardDetails] = useState([]);
   const [paymentError, setPaymentError] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -19,7 +21,8 @@ const BillPayment = () => {
   const [selectedCard, setSelectedCard] = useState();
   const userId = localStorage.getItem("userId");
 
-  console.log("userId", userId);
+  console.log("paidBillspaidBills", paidBills);
+  console.log("dueBillsdueBills", dueBills);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,10 +44,27 @@ const BillPayment = () => {
       const mailDetails = await axios.get(
         `https://onebill-poc-backend-production.up.railway.app/api/bill-details/userid/${userId}`
       );
-      console.log("mailDetailsmailDetails", mailDetails);
+
+      console.log("mailDetails:", mailDetails);
+
+      const dueBills = [];
+      const paidBills = [];
+
+      mailDetails?.data?.forEach((bill) => {
+        if (bill.isPaid) {
+          paidBills.push(bill);
+        } else {
+          dueBills.push(bill);
+        }
+      });
+
       setInvoiceDetails(mailDetails?.data);
       setCardDetails(cardDetails?.data);
-    } catch (error) {}
+      setDueBills(dueBills);
+      setPaidBills(paidBills);
+    } catch (error) {
+      console.error("Error fetching card details or bills:", error);
+    }
   };
 
   useEffect(() => {
@@ -184,37 +204,81 @@ const BillPayment = () => {
 
       <h2 className="text-2xl font-bold text-white mb-4">Due Bills</h2>
 
-      <div className="space-y-4">
-        {invoiceDetails.length > 0 ? (
-          invoiceDetails.map((bill) => (
-            <div key={bill.id} className="bg-zinc-900 shadow-md rounded-md p-6">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div className="space-y-1">
-                  <h3 className="font-medium text-lg text-white">
-                    {bill.service}
-                  </h3>
-                  <p className="text-sm text-gray-400">{bill.dueDate}</p>
-                </div>
+      <div className="space-y-8">
+        {/* Due Bills Section */}
+        <div>
+          <h2 className="text-xl font-semibold text-white">Pending Bills</h2>
+          <div className="space-y-4">
+            {dueBills.length > 0 ? (
+              dueBills.map((bill) => (
+                <div
+                  key={bill.id}
+                  className="bg-zinc-900 shadow-md rounded-md p-6"
+                >
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-medium text-lg text-white">
+                        {bill.service}
+                      </h3>
+                      <p className="text-sm text-gray-400">{bill.dueDate}</p>
+                    </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="text-xl font-bold text-green-400">
-                    ${bill.amount}
+                    <div className="flex items-center gap-4">
+                      <div className="text-xl font-bold text-green-400">
+                        ${bill.amount}
+                      </div>
+                      <button
+                        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
+                        onClick={() => handlePayment(bill.id)}
+                      >
+                        Pay Now
+                      </button>
+                    </div>
                   </div>
-                  <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md cursor-pointer"
-                    onClick={() => handlePayment(bill.id)}
-                  >
-                    Pay Now
-                  </button>
                 </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-400 text-lg mt-4">
+                No pending bills
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center text-gray-400 text-lg mt-4">
-            No pending bills
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Paid Bills Section */}
+        <div>
+          <h2 className="text-xl font-semibold text-white">Paid Bills</h2>
+          <div className="space-y-4">
+            {paidBills.length > 0 ? (
+              paidBills.map((bill) => (
+                <div
+                  key={bill.id}
+                  className="bg-zinc-800 shadow-md rounded-md p-6 opacity-70"
+                >
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-medium text-lg text-white">
+                        {bill.service}
+                      </h3>
+                      <p className="text-sm text-gray-400">{bill.dueDate}</p>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className="text-xl font-bold text-green-400">
+                        ${bill.amount}
+                      </div>
+                      <span className="text-green-500 font-medium">Paid</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-400 text-lg mt-4">
+                No paid bills
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

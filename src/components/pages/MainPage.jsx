@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 const MainPage = () => {
   return (
     <>
-      <Header />
+      <Header className="z-50" />
       {/* <InvoiceEmails /> */}
       <div className="flex w-full">
         <SideNavBar />
