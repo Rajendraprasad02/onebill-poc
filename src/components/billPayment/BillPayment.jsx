@@ -504,7 +504,7 @@ const BillPayment = () => {
               ${calculateTotalDue()}
             </div>
             <button
-              className={`w-full mt-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 transition-all ${
+              className={`cursor-pointer w-full mt-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 transition-all ${
                 dueBills.length > 0 && selectedCard
                   ? "bg-blue-600 hover:bg-blue-700"
                   : "bg-gray-700 cursor-not-allowed"
@@ -557,7 +557,7 @@ const BillPayment = () => {
                         ${Number(bill.amount).toFixed(2)}
                       </div>
                       <button
-                        className={`py-2 px-4 rounded-lg text-white font-medium flex items-center gap-2 transition-all ${
+                        className={`cursor-pointer py-2 px-4 rounded-lg text-white font-medium flex items-center gap-2 transition-all ${
                           selectedCard
                             ? "bg-blue-600 hover:bg-blue-700"
                             : "bg-gray-700 cursor-not-allowed"
