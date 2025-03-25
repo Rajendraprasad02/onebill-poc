@@ -15,17 +15,23 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const [profile, setProfile] = useState({});
-
+  const [profile, setProfile] = useState(() => {
+    const storedProfile = localStorage.getItem("userProfile");
+    return storedProfile ? JSON.parse(storedProfile) : {};
+  });
   console.log("profileprofileprofile", profile);
 
   useEffect(() => {
-    const storedProfile = localStorage.getItem("userProfile");
-    console.log("storedProfile", storedProfile);
+    const updateProfile = () => {
+      const storedProfile = localStorage.getItem("userProfile");
+      setProfile(storedProfile ? JSON.parse(storedProfile) : {});
+    };
 
-    if (storedProfile) {
-      setProfile(JSON.parse(storedProfile));
-    }
+    window.addEventListener("profileUpdated", updateProfile);
+
+    return () => {
+      window.removeEventListener("profileUpdated", updateProfile);
+    };
   }, []);
 
   const navigate = useNavigate();

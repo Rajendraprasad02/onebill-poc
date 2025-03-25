@@ -50,21 +50,16 @@ const AuthRedirect = () => {
       const isNewUser = queryParams.get("isNewUser") === "true"; // Convert to boolean
       const userId = queryParams.get("userid");
 
-      if (token) {
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("authProvider", provider);
-        localStorage.setItem("userId", userId);
-
-        if (isNewUser) {
-          navigate("/profile"); // Redirect to profile setup
-        } else {
-          navigate("/"); // Redirect to dashboard
-        }
-      } else {
+      if (!token) {
         console.error("No token found.");
-        navigate("/"); // Redirect to login if token is missing
+        navigate("/"); // Redirect to login
         return;
       }
+
+      // Store token, provider, and user ID
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("authProvider", provider);
+      localStorage.setItem("userId", userId);
 
       let userProfile = {};
       let normalizedEmails = [];
@@ -112,6 +107,11 @@ const AuthRedirect = () => {
             );
 
             profilePictureUrl = URL.createObjectURL(profilePictureRes.data);
+
+            // Cleanup memory leak
+            setTimeout(() => {
+              URL.revokeObjectURL(profilePictureUrl);
+            }, 5000);
           } catch (error) {
             console.warn("No profile picture found. Using default.");
           }
@@ -137,15 +137,25 @@ const AuthRedirect = () => {
 
         // Store Profile & Emails in localStorage
         localStorage.setItem("userProfile", JSON.stringify(userProfile));
+
+        // 🔔 Dispatch event to notify `Profile` component of updates
+        window.dispatchEvent(new Event("profileUpdated"));
       } catch (error) {
         console.error("Error fetching emails/profile:", error);
+      }
+
+      // Redirect user based on status
+      if (isNewUser) {
+        navigate("/profile"); // Redirect to profile setup
+      } else {
+        navigate("/"); // Redirect to dashboard
       }
     };
 
     fetchEmailsAndProfile();
   }, [location, navigate]);
 
-  return null; // No UI needed, just handling token storage and redirection
+  return null; // No UI needed
 };
 
 export default AuthRedirect;
