@@ -231,8 +231,9 @@ const Profile = () => {
         );
 
         const result = await response.json();
+        const userId = result?.user?.id;
 
-        console.log("resultresult", result);
+        localStorage.setItem("userId", userId);
 
         if (response.ok) {
           navigate("/invoice-emails"); // Redirect after successful user & card creation
