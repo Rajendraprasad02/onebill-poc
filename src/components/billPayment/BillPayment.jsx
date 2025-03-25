@@ -110,10 +110,8 @@ const BillPayment = () => {
   ];
 
   const handlePayment = async (billId) => {
-    // Simulate payment process
-    setPaymentLoader(true);
-
     try {
+      setPaymentLoader(true);
       const response = await axios.put(
         `https://onebill-poc-backend-production.up.railway.app/api/bill-details/update/${billId}`,
         { isPaid: true },
@@ -121,8 +119,10 @@ const BillPayment = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
+
       fetchCardDetailsAndMails();
       setPaymentLoader(false);
+
       // Show success toast
       toast.success("Payment successful!", {
         position: "top-right",
@@ -135,7 +135,16 @@ const BillPayment = () => {
         theme: "dark",
       });
     } catch (error) {
-      toast.error("Payment failed! Please try again.", {
+      setPaymentLoader(false);
+
+      console.error("Payment Error:", error);
+
+      // Extract the actual error message from the backend response
+      const errorMessage =
+        error.response?.data?.message || "Payment failed! Please try again.";
+
+      // Show error toast with the backend message
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
