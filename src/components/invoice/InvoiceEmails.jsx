@@ -66,14 +66,38 @@ const InvoiceEmails = () => {
 
           setProfile(userProfile);
 
-          normalizedEmails =
-            response?.data?.emails?.map((email, index) => ({
-              id: index, // Use index as a temporary ID if the API doesn't provide one
-              subject: email?.subject, // Fix variable reference
-              sender: email?.from, // Fix variable reference
-              message: email?.messageBody, // Include message body
-              attachments: email?.attachments || [], // Ensure attachments are included
-            })) || [];
+          // normalizedEmails =
+          // response?.data?.emails?.map((email, index) => (
+          //   const receivedHeader = email?.payload?.headers?.find((i) => i?.name === "Received")?.value;
+          //   const receivedTimestamp = receivedHeader?.match(/(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} [-+]\d{4} \(\w+\))/)?.[0];
+
+          //     {
+          //     id: index, // Use index as a temporary ID if the API doesn't provide one
+          //     subject: email?.subject, // Fix variable reference
+          //     sender: email?.from, // Fix variable reference
+          //     message: email?.messageBody, // Include message body
+          //     attachments: email?.attachments || [], // Ensure attachments are included
+          //     received:receivedTimestamp
+          //   })) || [];
+          const normalizedEmails =
+            response?.data?.emails?.map((email, index) => {
+              const receivedHeader = email?.payload?.headers?.find(
+                (i) => i?.name === "Received"
+              )?.value;
+              const receivedTimestamp = receivedHeader?.match(
+                /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} [-+]\d{4} \(\w+\))/
+              )?.[0];
+              console.log("receivedHeader", receivedHeader);
+              console.log("receivedTimestamp", receivedTimestamp);
+              return {
+                id: index, // Use index as a temporary ID if the API doesn't provide one
+                subject: email?.subject,
+                sender: email?.from,
+                message: email?.messageBody,
+                attachments: email?.attachments || [],
+                received: receivedTimestamp, // Extracted timestamp from the "Received" header
+              };
+            }) || [];
         } else if (provider === "outlook") {
           try {
             // Fetch Outlook Emails with "invoice" in Subject
@@ -406,7 +430,7 @@ const InvoiceEmails = () => {
 
   return (
     <div className="min-h-screen bg-zinc-950 p-4 md:p-6 text-white">
-      {nessw?.length === 0 ? (
+      {emails?.length === 0 ? (
         <div className="bg-zinc-950 text-zinc-100 w-full flex justify-center align-middle h-screen">
           <div className="">
             <p className="font-semibold">No invoice emails found.</p>
@@ -415,7 +439,7 @@ const InvoiceEmails = () => {
       ) : (
         <div className="h-full z-0 ">
           <ul className="flex flex-col gap-4">
-            {nessw?.map((email, index) => (
+            {emails?.map((email, index) => (
               <li
                 key={index}
                 className="w-full bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
@@ -431,7 +455,7 @@ const InvoiceEmails = () => {
                     </p>
                   </div>
                   <p className="text-gray-500 dark:text-gray-400">
-                    {email?.subject || "No Subject"}
+                    {email?.received || "-"}
                   </p>
                 </div>
 
