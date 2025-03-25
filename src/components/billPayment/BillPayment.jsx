@@ -366,15 +366,17 @@ const BillPayment = () => {
         if (bill.isPaid) {
           paidBills.push(bill);
         } else {
-          dueBills.push(bill);
-
-          // If the bill is due this month, add it to urgentBills
+          // If the bill is due this month, add it to urgentBills instead of dueBills
           if (bill.dueDate) {
             const billDate = parse(bill.dueDate, "MMMM yyyy", new Date()); // Parse "March 2025"
             if (isSameMonth(billDate, currentDate)) {
               urgentBills.push(bill);
+              return; // Skip adding it to dueBills
             }
           }
+
+          // If not urgent, add to dueBills
+          dueBills.push(bill);
         }
       });
 
