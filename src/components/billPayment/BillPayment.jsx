@@ -308,6 +308,7 @@ import {
   DollarSign,
   Loader2,
 } from "lucide-react";
+import { isSameMonth, parseISO } from "date-fns";
 
 const BillPayment = () => {
   const messages = [
@@ -324,6 +325,12 @@ const BillPayment = () => {
   const [paymentLoader, setPaymentLoader] = useState(false);
   const [selectedCard, setSelectedCard] = useState("");
   const [isProcessingAll, setIsProcessingAll] = useState(false);
+  const [urgentBills, setUrgentBills] = useState([]);
+
+  console.log("urgentBills", urgentBills);
+  console.log("paidBills", paidBills);
+  console.log("dueBills", dueBills);
+
   const userId =
     typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
@@ -351,12 +358,23 @@ const BillPayment = () => {
 
       const dueBills = [];
       const paidBills = [];
+      const urgentBills = [];
+
+      const currentDate = new Date();
 
       billResponse?.data?.forEach((bill) => {
         if (bill.isPaid) {
           paidBills.push(bill);
         } else {
           dueBills.push(bill);
+
+          // If the bill is due this month, add it to urgentBills
+          if (
+            bill.dueDate &&
+            isSameMonth(parseISO(bill.dueDate), currentDate)
+          ) {
+            urgentBills.push(bill);
+          }
         }
       });
 
@@ -364,6 +382,7 @@ const BillPayment = () => {
       setCardDetails(cardResponse?.data || []);
       setDueBills(dueBills);
       setPaidBills(paidBills);
+      setUrgentBills(urgentBills); // Store urgent bills separately
 
       // Set default selected card if available
       if (cardResponse?.data?.length > 0 && !selectedCard) {
@@ -526,6 +545,56 @@ const BillPayment = () => {
                 </>
               )}
             </button>
+          </div>
+        </div>
+
+        {/* Urgent Bills Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
+            <span className="inline-block w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+            Immediate Due Bills ({urgentBills.length})
+          </h2>
+          <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {urgentBills.length > 0 ? (
+              urgentBills.map((bill) => (
+                <div
+                  key={bill.id}
+                  className="bg-zinc-900 shadow-lg rounded-lg p-5 border border-zinc-800 hover:border-zinc-700 transition-all"
+                >
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-medium text-lg text-white">
+                        {bill.service}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        Due: {bill.dueDate}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                      <div className="text-xl font-bold text-green-400">
+                        ${Number(bill.amount).toFixed(2)}
+                      </div>
+                      <button
+                        className={`cursor-pointer py-2 px-4 rounded-lg text-white font-medium flex items-center gap-2 transition-all ${
+                          selectedCard
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-gray-700 cursor-not-allowed"
+                        }`}
+                        onClick={() => selectedCard && handlePayment(bill.id)}
+                        disabled={!selectedCard}
+                      >
+                        Pay Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-400 text-lg py-8 bg-zinc-900 rounded-lg border border-dashed border-zinc-800">
+                No pending bills
+              </div>
+            )}
           </div>
         </div>
 
