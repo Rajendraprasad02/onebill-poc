@@ -36,7 +36,6 @@ const Profile = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
     phone: "",
     password: "",
     confirmPassword: "",
@@ -159,11 +158,7 @@ const Profile = () => {
     if (!formData.firstName.trim())
       newErrors.firstName = "First name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
+
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
 
     // Validate cards
@@ -366,19 +361,13 @@ const Profile = () => {
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
                     <input
-                      id="email"
-                      name="email"
                       type="email"
                       value={profile.email}
-                      onChange={handleUserChange}
                       disabled="true"
                       className="w-full bg-zinc-700 border border-zinc-600 rounded-md py-2 pl-10 pr-3 text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                       placeholder="john.doe@example.com"
                     />
                   </div>
-                  {errors.email && (
-                    <p className="text-red-400 text-sm mt-1">{errors.email}</p>
-                  )}
                 </div>
 
                 <div className="space-y-2">
