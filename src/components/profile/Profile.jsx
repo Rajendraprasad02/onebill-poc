@@ -15,12 +15,12 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const userId = localStorage.getItem("userId");
+  const provider = localStorage.getItem("authProvider");
+  const token = localStorage.getItem("authToken");
   const [profile, setProfile] = useState({});
 
   const navigate = useNavigate();
-
-  const token = localStorage.getItem("authToken");
-  const provider = localStorage.getItem("authProvider");
 
   useEffect(() => {
     const storedProfile = localStorage.getItem("userProfile");
