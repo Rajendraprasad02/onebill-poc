@@ -568,7 +568,7 @@ const BillPayment = () => {
                       <h3 className="font-medium text-lg text-white">
                         {bill.service}
                       </h3>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-red-500 font-semibold">
                         Due: {bill.dueDate}
                       </p>
                     </div>
@@ -618,7 +618,7 @@ const BillPayment = () => {
                       <h3 className="font-medium text-lg text-white">
                         {bill.service}
                       </h3>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-yellow-500 font-semibold">
                         Due: {bill.dueDate}
                       </p>
                     </div>
