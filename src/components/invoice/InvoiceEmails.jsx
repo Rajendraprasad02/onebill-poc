@@ -46,117 +46,117 @@ const InvoiceEmails = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  useEffect(() => {
-    if (!token) {
-      setError("No token found.");
-      setLoading(false);
-      return;
-    }
+  // useEffect(() => {
+  //   if (!token) {
+  //     setError("No token found.");
+  //     setLoading(false);
+  //     return;
+  //   }
 
-    const fetchEmails = async () => {
-      setLoading(true);
-      try {
-        let response;
-        let normalizedEmails = [];
+  //   const fetchEmails = async () => {
+  //     setLoading(true);
+  //     try {
+  //       let response;
+  //       let normalizedEmails = [];
 
-        if (provider === "google") {
-          response = await axios.get(
-            // `http://localhost:3000/api/emails?token=${token}`
-            `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
-          );
+  //       if (provider === "google") {
+  //         response = await axios.get(
+  //           // `http://localhost:3000/api/emails?token=${token}`
+  //           `https://onebill-poc-backend-production.up.railway.app/api/emails?token=${token}`
+  //         );
 
-          console.log("responseresponse", response);
+  //         console.log("responseresponse", response);
 
-          const userProfile = response?.data?.userInfo;
+  //         const userProfile = response?.data?.userInfo;
 
-          setProfile(userProfile);
+  //         setProfile(userProfile);
 
-          normalizedEmails =
-            response?.data?.emails?.map((email, index) => ({
-              id: index, // Use index as a temporary ID if the API doesn't provide one
-              subject: email?.subject, // Fix variable reference
-              sender: email?.from, // Fix variable reference
-              message: email?.messageBody, // Include message body
-              attachments: email?.attachments || [], // Ensure attachments are included
-              received: email?.payload?.headers
-                ?.find((i) => i?.name === "Received")
-                ?.value?.match(
-                  /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2})/
-                )?.[0],
-            })) || [];
-        } else if (provider === "outlook") {
-          try {
-            // Fetch Outlook Emails with "invoice" in Subject
-            const response = await axios.get(
-              "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
+  //         normalizedEmails =
+  //           response?.data?.emails?.map((email, index) => ({
+  //             id: index, // Use index as a temporary ID if the API doesn't provide one
+  //             subject: email?.subject, // Fix variable reference
+  //             sender: email?.from, // Fix variable reference
+  //             message: email?.messageBody, // Include message body
+  //             attachments: email?.attachments || [], // Ensure attachments are included
+  //             received: email?.payload?.headers
+  //               ?.find((i) => i?.name === "Received")
+  //               ?.value?.match(
+  //                 /(\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2})/
+  //               )?.[0],
+  //           })) || [];
+  //       } else if (provider === "outlook") {
+  //         try {
+  //           // Fetch Outlook Emails with "invoice" in Subject
+  //           const response = await axios.get(
+  //             "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=contains(subject, 'invoice')",
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
 
-            console.log("responseresponse", response);
+  //           console.log("responseresponse", response);
 
-            // Fetch User Profile
-            const userProfileRes = await axios.get(
-              "https://graph.microsoft.com/v1.0/me",
-              {
-                headers: { Authorization: `Bearer ${token}` },
-              }
-            );
+  //           // Fetch User Profile
+  //           const userProfileRes = await axios.get(
+  //             "https://graph.microsoft.com/v1.0/me",
+  //             {
+  //               headers: { Authorization: `Bearer ${token}` },
+  //             }
+  //           );
 
-            const userProfile = userProfileRes.data;
+  //           const userProfile = userProfileRes.data;
 
-            let profilePictureUrl =
-              "https://static.vecteezy.com/system/resources/previews/009/734/564/non_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"; // Default Image
-            try {
-              const profilePictureRes = await axios.get(
-                "https://graph.microsoft.com/v1.0/me/photo/$value",
-                {
-                  headers: { Authorization: `Bearer ${token}` },
-                  responseType: "blob",
-                }
-              );
+  //           let profilePictureUrl =
+  //             "https://static.vecteezy.com/system/resources/previews/009/734/564/non_2x/default-avatar-profile-icon-of-social-media-user-vector.jpg"; // Default Image
+  //           try {
+  //             const profilePictureRes = await axios.get(
+  //               "https://graph.microsoft.com/v1.0/me/photo/$value",
+  //               {
+  //                 headers: { Authorization: `Bearer ${token}` },
+  //                 responseType: "blob",
+  //               }
+  //             );
 
-              const imageUrl = URL.createObjectURL(profilePictureRes.data);
-              profilePictureUrl = imageUrl;
-            } catch (error) {
-              console.warn("No profile picture found. Using default.");
-            }
+  //             const imageUrl = URL.createObjectURL(profilePictureRes.data);
+  //             profilePictureUrl = imageUrl;
+  //           } catch (error) {
+  //             console.warn("No profile picture found. Using default.");
+  //           }
 
-            // Set Profile State
-            setProfile({
-              name: userProfile?.displayName,
-              email: userProfile?.mail || userProfile?.userPrincipalName, // Fallback for missing mail
-              profilePicture: profilePictureUrl,
-            });
+  //           // Set Profile State
+  //           setProfile({
+  //             name: userProfile?.displayName,
+  //             email: userProfile?.mail || userProfile?.userPrincipalName, // Fallback for missing mail
+  //             profilePicture: profilePictureUrl,
+  //           });
 
-            // Normalize Emails
-            normalizedEmails =
-              response?.data?.value?.map((email) => ({
-                id: email.id,
-                subject: email.subject,
-                sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
-                received: formatReceivedDateTime(email.receivedDateTime),
-                message: email?.body?.content,
-              })) || [];
-          } catch (error) {
-            console.error("Error fetching Outlook emails/profile:", error);
-          }
-        } else {
-          throw new Error("Invalid provider");
-        }
+  //           // Normalize Emails
+  //           normalizedEmails =
+  //             response?.data?.value?.map((email) => ({
+  //               id: email.id,
+  //               subject: email.subject,
+  //               sender: email.from?.emailAddress?.address, // Outlook uses a nested structure
+  //               received: formatReceivedDateTime(email.receivedDateTime),
+  //               message: email?.body?.content,
+  //             })) || [];
+  //         } catch (error) {
+  //           console.error("Error fetching Outlook emails/profile:", error);
+  //         }
+  //       } else {
+  //         throw new Error("Invalid provider");
+  //       }
 
-        setEmails(normalizedEmails);
-      } catch (error) {
-        console.error("Error fetching emails:", error);
-        setError("Failed to fetch emails.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       setEmails(normalizedEmails);
+  //     } catch (error) {
+  //       console.error("Error fetching emails:", error);
+  //       setError("Failed to fetch emails.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchEmails();
-  }, [token, provider]);
+  //   fetchEmails();
+  // }, [token, provider]);
 
   const toggleEmailDetail = (index) => {
     setActiveEmailIndex((prev) => (prev === index ? null : index));
@@ -415,8 +415,8 @@ const InvoiceEmails = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 p-4 md:p-6 text-white">
-      {emails?.length === 0 ? (
+    <div className="min-h-screen bg-zinc-950 p-4 md:p-6 text-white  pt-24">
+      {nessw?.length === 0 ? (
         <div className="bg-zinc-950 text-zinc-100 w-full flex justify-center align-middle h-screen">
           <div className="">
             <p className="font-semibold">No invoice emails found.</p>
@@ -425,7 +425,7 @@ const InvoiceEmails = () => {
       ) : (
         <div className="h-full z-0 ">
           <ul className="flex flex-col gap-4">
-            {emails?.map((email, index) => (
+            {nessw?.map((email, index) => (
               <li
                 key={index}
                 className="w-full bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
