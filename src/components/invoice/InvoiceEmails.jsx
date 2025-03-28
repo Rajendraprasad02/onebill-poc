@@ -416,7 +416,7 @@ const InvoiceEmails = () => {
 
   return (
     <div className="min-h-screen bg-zinc-950 p-4 md:p-6 text-white  pt-24">
-      {nessw?.length === 0 ? (
+      {emails?.length === 0 ? (
         <div className="bg-zinc-950 text-zinc-100 w-full flex justify-center align-middle h-screen">
           <div className="">
             <p className="font-semibold">No invoice emails found.</p>
@@ -425,7 +425,7 @@ const InvoiceEmails = () => {
       ) : (
         <div className="h-full z-0 ">
           <ul className="flex flex-col gap-4">
-            {nessw?.map((email, index) => (
+            {emails?.map((email, index) => (
               <li
                 key={index}
                 className="w-full bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md p-4 transition-all transform cursor-pointer mx-auto"
