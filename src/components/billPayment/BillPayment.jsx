@@ -327,10 +327,6 @@ const BillPayment = () => {
   const [isProcessingAll, setIsProcessingAll] = useState(false);
   const [urgentBills, setUrgentBills] = useState([]);
 
-  console.log("urgentBills", urgentBills);
-  console.log("paidBills", paidBills);
-  console.log("dueBills", dueBills);
-
   const userId =
     typeof window !== "undefined" ? localStorage.getItem("userId") : null;
 
@@ -450,7 +446,7 @@ const BillPayment = () => {
   };
 
   const calculateTotalDue = () => {
-    return dueBills
+    return [...dueBills, ...urgentBills]
       .reduce((total, bill) => total + Number(bill.amount), 0)
       .toFixed(2);
   };
