@@ -277,6 +277,10 @@ const InvoiceEmails = () => {
         </div>
       ) : (
         <div className="h-full z-0 ">
+          <h1>
+            Inbox From {provider.charAt(0).toUpperCase() + provider.slice(1)}
+          </h1>
+
           <ul className="flex flex-col gap-4">
             {emails?.map((email, index) => (
               <li
