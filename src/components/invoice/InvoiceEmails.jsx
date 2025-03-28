@@ -277,7 +277,7 @@ const InvoiceEmails = () => {
         </div>
       ) : (
         <div className="h-full z-0 ">
-          <h1>
+          <h1 className="text-2xl font-bold text-gray-300 py-2">
             Inbox From {provider.charAt(0).toUpperCase() + provider.slice(1)}
           </h1>
 
