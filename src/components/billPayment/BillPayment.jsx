@@ -208,7 +208,7 @@ const BillPayment = () => {
   };
 
   const calculateTotalDue = () => {
-    return [...dueBills, ...urgentBills]
+    return [...dueBills, ...urgentBills, ...overDue]
       .reduce((total, bill) => total + Number(bill.amount), 0)
       .toFixed(2);
   };
@@ -316,39 +316,45 @@ const BillPayment = () => {
             Overdue Bills ({overDue?.length})
           </h2>
           <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-            {overDue?.map((bill) => (
-              <div
-                key={bill.id}
-                className="bg-zinc-900 shadow-lg rounded-lg p-5 border border-red-600 hover:border-red-500 transition-all"
-              >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div className="space-y-1">
-                    <h3 className="font-medium text-lg text-white">
-                      {bill.service}
-                    </h3>
-                    <p className="text-sm text-red-500 font-semibold">
-                      Overdue: {bill.dueDate}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-4 w-full md:w-auto">
-                    <div className="text-xl font-bold text-green-400">
-                      ${Number(bill.amount).toFixed(2)}
+            {overDue?.length > 0 ? (
+              overDue?.map((bill) => (
+                <div
+                  key={bill.id}
+                  className="bg-zinc-900 shadow-lg rounded-lg p-5 border border-red-600 hover:border-red-500 transition-all"
+                >
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-medium text-lg text-white">
+                        {bill.service}
+                      </h3>
+                      <p className="text-sm text-red-500 font-semibold">
+                        Overdue: {bill.dueDate}
+                      </p>
                     </div>
-                    <button
-                      className={`py-2 px-4 rounded-lg text-white font-medium flex items-center gap-2 transition-all ${
-                        selectedCard
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : "bg-gray-700 cursor-not-allowed"
-                      }`}
-                      onClick={() => selectedCard && handlePayment(bill.id)}
-                      disabled={!selectedCard}
-                    >
-                      Pay Now
-                    </button>
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                      <div className="text-xl font-bold text-green-400">
+                        ${Number(bill.amount).toFixed(2)}
+                      </div>
+                      <button
+                        className={`py-2 px-4 rounded-lg text-white font-medium flex items-center gap-2 transition-all ${
+                          selectedCard
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-gray-700 cursor-not-allowed"
+                        }`}
+                        onClick={() => selectedCard && handlePayment(bill.id)}
+                        disabled={!selectedCard}
+                      >
+                        Pay Now
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-400 text-lg py-8 bg-zinc-900 rounded-lg border border-dashed border-zinc-800">
+                No Overdue bills
               </div>
-            ))}
+            )}
           </div>
         </div>
 
